@@ -1,0 +1,11 @@
+[user]
+	name = Conner McDaniel
+	email = connermcd@gmail.com
+[push]
+	default = tracking
+[mergetool]
+	keepBackup = false
+[merge]
+	tool = vimdiff
+[color]
+	ui = true

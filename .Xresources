@@ -1,0 +1,39 @@
+URxvt*depth           : 32
+URxvt*buffered        : true
+URxvt*foreground      : #aaaaaa
+URxvt*background      : [85]#000000
+URxvt*shading         : 30
+URxvt*fading          : 10%
+URxvt*internalBorder  : 5
+URxvt*scrollBar       : False
+URxvt*pointerBlank    : true
+URxvt*font            : xft:Inconsolata:size=11,xft:Monospace
+URxvt*perl-ext-common : default,matcher
+URxvt*urlLauncher     : /usr/bin/chromium
+URxvt*matcher.button  : 1
+URxvt*termName        : rxvt-unicode-256color
+
+!black
+*color0 :            #222222
+*color8 :            #454545
+!red
+*color1 :            #B22222
+*color9 :            #FA8072
+!green
+*color2 :            #556B2F
+*color10:            #779A3E
+!yellow
+*color3 :            #B8860B
+*color11:            #DAA520
+!blue
+*color4 :            #4682B4
+*color12:            #6495ED
+!magenta
+*color5 :            #9932CC
+*color13:            #DA70D6
+!cyan
+*color6 :            #87CEEB
+*color14:            #B0E0E6
+!white
+*color7 :            #C0C0C0
+*color15:            #FFFFFF

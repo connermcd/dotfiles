@@ -1,0 +1,61 @@
+# first things first
+set editor              = "vim -c start"
+set realname            = "Conner McDaniel"
+
+source ~/.mutt/accounts/gmail
+# source ~/.mutt/muttgpg
+source ~/.mutt/keybindings
+source ~/.mutt/colorscheme
+
+set mbox_type           = Maildir
+set mbox                = "+[Gmail].All Mail"
+set postponed           = "+[Gmail].Drafts"
+set mail_check          = 0
+
+# goobook
+set sort_alias          = alias
+set reverse_alias       = yes
+
+mailboxes +INBOX
+alternative_order text/plain text/enriched text/html
+auto_view text/html
+
+ignore *
+unignore from: subject to cc date x-mailer x-url user-agent
+hdr_order date from to cc subject
+
+set header_cache        = ~/.mutt/cache/headers
+set message_cachedir    = ~/.mutt/cache/bodies
+set certificate_file    = ~/.mutt/certificates
+set mailcap_path        = ~/.mutt/mailcap
+set signature           = ~/.mutt/signature
+
+set forward_edit        = ask-yes
+set forward_format      = "Fwd: %s"
+set include             = yes
+set mime_forward        = yes
+set mime_forward_rest   = yes
+set move                = no
+set print               = yes
+set quit                = yes
+set sig_dashes          = no
+set sort                = 'threads'
+set sort_aux            = 'reverse-last-date-received'
+set text_flowed         = yes
+set timeout             = 1
+
+set delete
+set envelope_from
+set fast_reply
+set forward_quote
+set reverse_name
+set sig_on_top
+set smart_wrap
+
+unset markers
+unset wait_key
+unset reply_self
+unset confirmappend
+unset move
+
+# vim: ft=muttrc

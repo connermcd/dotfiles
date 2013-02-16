@@ -1,0 +1,56 @@
+bind generic,index Q exit
+bind editor <space> noop
+bind editor <Tab> complete-query
+
+bind browser gg  top-page
+bind browser G   bottom-page
+bind browser \Cb previous-page
+bind browser \Cf next-page
+bind browser A   check-new
+bind browser v   view-file
+
+bind index ~   set-flag
+bind index \Cv what-key
+bind index H   current-top
+bind index M   current-middle
+bind index L   current-bottom
+bind index /   search
+bind index :   enter-command
+bind index i   mail
+
+bind pager i   edit
+bind pager u   mark-as-new
+bind pager gg  top
+bind pager G   bottom
+bind pager j   next-line
+bind pager k   previous-line
+
+bind index,attach gg  first-entry
+bind index,attach G   last-entry
+
+bind index,pager L   list-reply
+# bind index,pager P   print-message
+bind index,pager R   group-reply
+bind index,pager \Cd half-down
+bind index,pager \Cu half-up
+bind index,pager \Cf next-page
+bind index,pager \Cb previous-page
+bind index,pager \Cn next-thread
+bind index,pager \Cp previous-thread
+
+bind index,pager f forward-message
+bind index,pager p previous-undeleted
+bind index,pager N next-unread
+bind index,pager P previous-unread
+
+macro index Z "<shell-escape>mu find --clearlinks --format=links --linksdir=~/.mu/results " "mu find"
+macro index S "<change-folder-readonly>~/.mu/results<enter>" "mu find results"
+
+macro attach s <save-entry><kill-line>$HOME<enter> "Save to default directory for attachments"
+
+macro index,pager,attach,compose gfg "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
+macro compose gfg "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
+macro index,pager,attach,compose gfs "<enter-command> source ~/.mutt/accounts/school<Enter><enter-command> my_hdr From: Conner McDaniel <mcdanielc@livemail.uthscsa.edu><Enter><change-folder>=INBOX<Enter>" "School"
+macro compose gfs "<esc>f\CuConner McDaniel <mcdanielc@livemail.uthscsa.edu><enter>
+
+# vim: ft=muttrc

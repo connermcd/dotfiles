@@ -1,0 +1,87 @@
+# $Id: sample.mailcap,v 3.0 2002/01/24 12:11:17 roessler Exp $
+
+# ~/.mutt/mailcap
+#
+# this uses the view-attachment script found in ~/.mutt/view-attachment.sh
+#
+# this is meant for an OS X system
+
+# MS Excel
+# this will use the default xls spreadsheet handler from open
+application/x-msexcel; view-attachment %s "-" pdf
+application/ms-exc; view-attachment %s "-" pdf
+application/excel; view-attachment %s "-" pdf
+application/msexcel; view-attachment %s "-" pdf
+application/vnd.ms-exc; view-attachment %s "-" pdf
+application/vnd.ms-excel; view-attachment %s "-" pdf
+
+# MS Word
+# use textedit to open .doc files as it's more light-weight
+application/msword; view-attachment %s "-" pdf
+
+#
+# for Star/OpenOffice stuff, use NeoOffice/J
+#
+# Star/Open Office Writer
+application/vnd.sun.xml.writer; view-attachment %s "-" pdf
+application/vnd.sun.xml.writer.global; view-attachment %s "-" pdf
+application/vnd.stardivision.writer; view-attachment %s "-" pdf
+application/vnd.stardivision.writer-global; view-attachment %s "-" pdf
+application/x-starwriter; view-attachment %s "-" pdf
+application/vnd.sun.xml.writer.template; view-attachment %s "-" pdf
+
+# Star/Open Office Calc
+application/vnd.sun.xml.calc; view-attachment %s "-" pdf
+application/vnd.stardivision.calc; view-attachment %s "-" pdf
+application/x-starcalc; view-attachment %s "-" pdf
+application/vnd.sun.xml.calc.template; view-attachment %s "-" pdf
+
+# Star/Open Office Draw
+application/vnd.sun.xml.draw; view-attachment %s "-" pdf
+application/vnd.stardivision.draw; view-attachment %s "-" pdf
+application/x-stardraw; view-attachment %s "-" pdf
+application/vnd.sun.xml.draw.template; view-attachment %s "-" pdf
+
+# Star/Open Office Math
+application/vnd.sun.xml.math; view-attachment %s "-" pdf
+application/vnd.stardivision.math; view-attachment %s "-" pdf
+application/x-starmath; view-attachment %s "-" pdf
+
+application/vnd.sun.xml.writer; view-attachment %s "-" pdf
+
+# Star/Open Office Impress
+application/x-starimpress; view-attachment %s "-" pdf
+application/vnd.sun.xml.impress.template; view-attachment %s "-" pdf
+application/vnd.sun.xml.impress; view-attachment %s "-" pdf
+application/vnd.stardivision.impress; view-attachment %s "-" pdf
+application/vnd.stardivision.impress-packed; view-attachment %s "-" pdf
+
+# DOCX and things
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.spreadsheetml.template; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.presentationml.template; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.presentationml.slideshow; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.presentationml.presentation; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.presentationml.slide; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; view-attachment %s "-" pdf
+application/vnd.openxmlformats-officedocument.wordprocessingml.template; view-attachment %s "-" pdf
+application/vnd.ms-excel.addin.macroEnabled.12; view-attachment %s "-" pdf
+application/vnd.ms-excel.sheet.binary.macroEnabled.12; view-attachment %s "-" pdf
+
+# Images
+image/jpeg; view-attachment %s "-" "feh"
+image/pjpeg; view-attachment %s "-" "feh"
+image/png; view-attachment %s "-" "feh"
+image/gif; view-attachment %s "-" "feh"
+image/tiff; view-attachment %s "-" "feh"
+
+# PDF
+application/pdf; view-attachment %s "-"
+
+# HTML
+# text/html; lynx -stdin -dump -force_html ; copiousoutput
+text/html; pandoc -f html -t markdown; copiousoutput
+
+# Unidentified.
+application/octet-stream; view-attachment %s "-"
+video/*; view-attachment %s "-"

@@ -1,0 +1,78 @@
+# set to yes if you want conky to be forked in the background
+background no
+
+use_xft yes
+
+# Xft font when Xft is enabled
+xftfont Inconsolata
+#xftfont Bitstream Vera Sans Mono-7
+#xftfont Andale Mono-9
+#xftfont Clean-8
+#xftfont cubicfive10:pixelsize=8
+#xftfont squaredance10:pixelsize=14
+#xftfont swf!t_v02:pixelsize=10
+
+# Text alpha when using Xft
+# xftalpha 0.8
+
+# Update interval in seconds
+update_interval 1.0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_type conky
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 775 125
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no # amplifies text
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 0
+
+# border width
+border_width 0
+
+# Default colors and also border colors, grey90 == #e5e5e5
+default_color grey90
+default_shade_color grey
+default_outline_color grey
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+gap_x 30
+gap_y 50
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# stuff after 'TEXT' will be formatted on screen
+
+TEXT
+${if_mpd_playing}$alignr${offset -125} $mpd_artist
+$alignr${offset -125} $mpd_album
+$alignr${offset -125} ${mpd_title 75}
+$alignr${offset -125} $mpd_elapsed/$mpd_length
+
+$alignr${offset -125}${mpd_bar 5,180} ${execi 2 /home/connermcd/.mpd/mpd-albumart.py}
+${image ~/.mpd/mpd.jpg -s 115x115 -p 665,0 -n}
+$endif

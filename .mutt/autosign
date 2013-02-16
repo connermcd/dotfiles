@@ -1,0 +1,1 @@
+          send-hook "(~t connermcd@gmail.com)" "set pgp_autosign"
