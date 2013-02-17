@@ -113,6 +113,8 @@ inoremap <C-Y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype dete
 nnoremap <C-j> o<esc>
 nnoremap <C-k> O<esc>
 
+nnoremap dg :diffget 
+
 nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
 nnoremap Q :exe "try <bar> tabc! <bar> catch /E784/ <bar> qa! <bar> endtry"<cr>
