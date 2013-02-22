@@ -1,10 +1,31 @@
 " Setup {{{1
 set nocompatible
-call pathogen#infect()
-call pathogen#infect('src')
-colorscheme hipster
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+Bundle 'vim-scripts/FuzzyFinder'
+Bundle 'vim-scripts/L9'
+Bundle 'mileszs/ack.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'vim-scripts/tComment'
+Bundle 'godlygeek/tabular'
+Bundle 'tpope/vim-fugitive'
+Bundle 'jamessan/vim-gnupg'
+Bundle 'tpope/vim-sleuth'
+Bundle 'tpope/vim-surround'
+Bundle 'benmills/vimux'
+Bundle 'int3/vim-taglist-plus'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-rails'
+
 filetype plugin indent on
 syntax enable
+
+colorscheme hipster
+
 " Options {{{1
 set autoread
 set backspace=2
@@ -32,7 +53,7 @@ set noequalalways
 set nohlsearch
 set nojoinspaces
 set number
-" set omnifunc=syntaxcomplete#Complete
+set omnifunc=syntaxcomplete#Complete
 set showcmd
 set shortmess=filnxtToOI
 set smartcase
@@ -118,7 +139,6 @@ nnoremap dg :diffget
 nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
 nnoremap Q :exe "try <bar> tabc! <bar> catch /E784/ <bar> qa! <bar> endtry"<cr>
-nnoremap K k
 vnoremap K k
 xnoremap p p:let @" = @0<cr>:<bs>
 vnoremap & :s<cr>
@@ -200,11 +220,7 @@ augroup vimrc " {{{2
 augroup end
 " Plugins {{{1
 " Fuzzy Finder {{{2
-nnoremap '.  :call CurDir()<cr>
-fun! CurDir()
-   let l:dir = expand('%') == '' ? getcwd() : expand('%:h')
-   exe 'FufFile '.l:dir.'/'
-endfun
+nnoremap '.  :FufFileWithCurrentBufferDir<cr>
 nnoremap ''  :b#<cr>
 nnoremap '/  :FufFile /<cr>
 nnoremap 'a  :FufFile app/<cr>
@@ -214,13 +230,14 @@ nnoremap 'f  :FufFile<cr>
 nnoremap 'h  :FufFile $HOME/<cr>
 nnoremap 'j  :FufFile $HOME/.vim/<cr>
 nnoremap 'k  :FufBuffer<cr>
+nnoremap 'l  :FufTag<cr>
 nnoremap 'n  :FufFile $HOME/Dropbox/Notes/mod<c-r>=g:module<cr>/<cr>
 nnoremap 'p  :e! $HOME/Dropbox/Archive/Important/passwords.gpg<cr>
 nnoremap 'r  :e! $HOME/.bashrc<cr><cr>
 nnoremap 's  :FufFile $HOME/.bin/<cr>
 nnoremap 't  :cd %:p:h<cr>:sh<cr>:cd -<cr>
 nnoremap 'v  :e! $MYVIMRC<cr><cr>
-nnoremap 'w  :FufFile $HOME/Dropbox/Tech/web/<cr>
+nnoremap 'w  :FufDir $HOME/Dropbox/Tech/web/<cr>
 nnoremap 'y  :FufFile $HOME/Dropbox/Archive/Bible/<cr>
 let g:fuf_file_exclude = '\v\~$|\.(DS_Store|o|exe|dll|bak|orig|swp)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
 " Surround.vim {{{2
@@ -435,14 +452,14 @@ inoremap <leader>-3 ^3-^
 " Extended Text Objects {{{1
 let items = [ "<bar>", "\\", "/", ":", ".", "*", "_" ]
 for item in items
-   exe "nnoremap yi".item." T".item."yt".item
-   exe "nnoremap ya".item." F".item."yf".item
-   exe "nnoremap ci".item." T".item."ct".item
-   exe "nnoremap ca".item." F".item."cf".item
-   exe "nnoremap di".item." T".item."dt".item
-   exe "nnoremap da".item." F".item."df".item
-   exe "nnoremap vi".item." T".item."vt".item
-   exe "nnoremap va".item." F".item."vf".item
+  exe "nnoremap yi".item." T".item."yt".item
+  exe "nnoremap ya".item." F".item."yf".item
+  exe "nnoremap ci".item." T".item."ct".item
+  exe "nnoremap ca".item." F".item."cf".item
+  exe "nnoremap di".item." T".item."dt".item
+  exe "nnoremap da".item." F".item."df".item
+  exe "nnoremap vi".item." T".item."vt".item
+  exe "nnoremap va".item." F".item."vf".item
 endfor
 nnoremap viz v[zo]z$
 
