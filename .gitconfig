@@ -6,6 +6,10 @@
 [mergetool]
 	keepBackup = false
 [merge]
-	tool = vimdiff
+	tool = fugitive
 [color]
 	ui = true
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[github]
+	user = connermcd

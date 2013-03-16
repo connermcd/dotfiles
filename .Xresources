@@ -7,7 +7,7 @@ URxvt*fading          : 10%
 URxvt*internalBorder  : 5
 URxvt*scrollBar       : False
 URxvt*pointerBlank    : true
-URxvt*font            : xft:Inconsolata:size=11,xft:Monospace
+URxvt*font            : xft:Inconsolata:size=12,xft:Monospace
 URxvt*perl-ext-common : default,matcher
 URxvt*urlLauncher     : /usr/bin/chromium
 URxvt*matcher.button  : 1

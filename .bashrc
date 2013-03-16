@@ -1,7 +1,13 @@
 # Setup {{{1
 stty -ixon -ixoff # turns off CTRL-S
 [[ $- != *i* ]] && return
-PS1='\[\e[1;36m\]\W\[\e[1;31m\]:\[\e[0m\] '
+
+if [ `hostname` == "connermcd-laptop" ]; then
+   PS1='\[\e[1;36m\]\W\[\e[1;31m\]:\[\e[0m\] '
+else
+   PS1="\[\e[0;37m\]@\[\e[1;30m\]$(hostname) \[\e[1;36m\]\W\[\e[1;31m\]:\[\e[0m\] "
+fi
+
 bind TAB:menu-complete
 # Env {{{1
 export BROWSER=/usr/bin/chromium
@@ -18,7 +24,6 @@ export LESS_TERMCAP_ue=$'\e[0m'     # end underline
 export LESS_TERMCAP_us=$'\e[01;36m' # begin underline
 # Aliases {{{1
 # abbrevs {{{2
-alias c="clear"
 alias cleanvim="vim -N -u NONE"
 alias em="mutt"
 alias htop="sudo htop"
@@ -29,6 +34,7 @@ alias open="xdg-open"
 alias ptime="find -type f -name \"*\" -print0 | xargs -0  mplayer -vo dummy -ao dummy -identify 2>/dev/null | perl -nle '/ID_LENGTH=([0-9\.]+)/ && (\$t +=\$1) && printf \"%02d:%02d:%02d\n\",\$t/3600,\$t/60%60,\$t%60' | tail -n 1"
 alias py="python"
 alias py2="python2"
+alias t="/home/connermcd/Dropbox/Tech/todo/todo.sh"
 alias tm="tmux"
 alias tma="tmux attach"
 alias trans="transmission-cli"
@@ -45,7 +51,6 @@ alias bd="cd $HOME/Dropbox/Tech/web/octopress && rake gen_deploy && cd -"
 alias nack="ack --text --nohtml"
 alias pandoc="pandoc --latex-engine=lualatex"
 alias pretty-json="python2 -mjson.tool"
-alias t="t -N -c -d ~/.todo/todo.cfg"
 alias screencast="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-interal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias wifi="wicd-cli -y"
@@ -75,6 +80,7 @@ if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
     PATH="${PATH:+"$PATH:"}$1"
 fi
 }
-pathadd /home/connermcd/.bin
+pathadd $HOME/.bin
+pathadd $HOME/.cabal/bin
 pathadd $(ruby -rubygems -e "puts Gem.user_dir")/bin
 # }}} vim: fdm=marker

@@ -16,10 +16,11 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'jamessan/vim-gnupg'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
-Bundle 'benmills/vimux'
-Bundle 'int3/vim-taglist-plus'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
+Bundle 'avelino/snipmate.vim'
+Bundle 'tpope/vim-haml'
+Bundle 'kchmck/vim-coffee-script'
 
 filetype plugin indent on
 syntax enable
@@ -54,12 +55,15 @@ set nohlsearch
 set nojoinspaces
 set number
 set omnifunc=syntaxcomplete#Complete
+set shiftwidth=4
 set showcmd
 set shortmess=filnxtToOI
 set smartcase
 set smartindent
 set spelllang=eng
+set tabstop=4
 set timeoutlen=600
+set ttyfast
 set visualbell t_vb=".
 set wildmode=list:longest,list:full
 set wrapmargin=0
@@ -122,6 +126,7 @@ nnoremap <leader>] :Note
 
 nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
 nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
 inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
 inoremap <C-u> <C-g>u<C-u>
@@ -134,14 +139,14 @@ inoremap <C-Y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype dete
 nnoremap <C-j> o<esc>
 nnoremap <C-k> O<esc>
 
-nnoremap dg :diffget 
-
 nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
 nnoremap Q :exe "try <bar> tabc! <bar> catch /E784/ <bar> qa! <bar> endtry"<cr>
 vnoremap K k
 xnoremap p p:let @" = @0<cr>:<bs>
 vnoremap & :s<cr>
+
+nnoremap <leader>r :nnoremap <leader>r :!
 
 " Remove duplicate lines (and empty lines unfortunately)
 com! RemoveDuplicateLines %!awk '\!x[$0]++'
@@ -151,6 +156,7 @@ nnoremap g<C-p> gT
 " nnoremap zp :norm! G{jzt13<C-y>G$<cr>
 nnoremap zp Gzt13<C-y>G$
 command! W w !sudo tee % &>/dev/null
+command! Mks let g:session = getcwd() <bar> call Mks(g:session)
 
 " Pull last visually selected area onto command-line mode
 cnoremap <C-R><C-V> <C-R>=fnameescape(getline("'<")[ getpos("'<")[2]-1 : getpos("'>")[2]-1 ])<CR>
@@ -179,10 +185,10 @@ augroup end
 augroup nonvim " {{{2
    au!
    au BufRead *.png,*.jpg,*.pdf,*.gif,*.xls*,*.scpt sil exe "!xdg-open " . shellescape(expand("%:p")) | bd | let &ft=&ft | redraw!
-   au BufRead *.ppt*,*.doc*,*.rtf sil exe "!xdg-open " . shellescape(expand("%:p")) | bd | let &ft=&ft | redraw!
-   " au BufRead *.ppt*,*.doc*,*.rtf let g:output_pdf = shellescape(expand("%:r") . ".pdf")
-   " au BufRead *.ppt*,*.doc*,*.rtf sil exe "!/usr/local/bin/any2pdf " . shellescape(expand("%:p"))
-   " au BufRead *.ppt*,*.doc*,*.rtf sil exe "!xdg-open " . g:output_pdf | bd | let &ft=&ft | redraw!
+   " au BufRead *.ppt*,*.doc*,*.rtf sil exe "!xdg-open " . shellescape(expand("%:p")) | bd | let &ft=&ft | redraw!
+   au BufRead *.ppt*,*.doc*,*.rtf let g:output_pdf = shellescape(expand("%:r") . ".pdf")
+   au BufRead *.ppt*,*.doc*,*.rtf sil exe "!$HOME/.bin/pdf " . shellescape(expand("%:p"))
+   au BufRead *.ppt*,*.doc*,*.rtf sil exe "!xdg-open " . g:output_pdf | bd | let &ft=&ft | redraw!
 augroup end
 augroup filetypes " {{{2
    au!
@@ -215,11 +221,15 @@ augroup filetypes " {{{2
 augroup end
 augroup vimrc " {{{2
    au!
+   au BufRead todo.txt setl ft=todotxt
    au BufWritePost $MYVIMRC sil so $MYVIMRC
    au BufWritePost * sil FufRenewCache
+   au BufRead *.session let g:session = getcwd() | so % | bd #
+   au VimLeave * if exists("g:session") | call Mks(g:session) | endif
 augroup end
 " Plugins {{{1
 " Fuzzy Finder {{{2
+nnoremap '<Space> :FufBookmarkDir<cr>
 nnoremap '.  :FufFileWithCurrentBufferDir<cr>
 nnoremap ''  :b#<cr>
 nnoremap '/  :FufFile /<cr>
@@ -237,7 +247,7 @@ nnoremap 'r  :e! $HOME/.bashrc<cr><cr>
 nnoremap 's  :FufFile $HOME/.bin/<cr>
 nnoremap 't  :cd %:p:h<cr>:sh<cr>:cd -<cr>
 nnoremap 'v  :e! $MYVIMRC<cr><cr>
-nnoremap 'w  :FufDir $HOME/Dropbox/Tech/web/<cr>
+nnoremap 'w  :FufFile $HOME/Dropbox/Tech/web/<cr>
 nnoremap 'y  :FufFile $HOME/Dropbox/Archive/Bible/<cr>
 let g:fuf_file_exclude = '\v\~$|\.(DS_Store|o|exe|dll|bak|orig|swp)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
 " Surround.vim {{{2
@@ -255,20 +265,6 @@ let Tlist_Auto_Update = 1
 let Tlist_Auto_Highlight_Tag = 1
 " tComment {{{2
 let g:tcommentGuessFileType_markdown = 'html'
-" vimux {{{2
-let g:VimuxResetSequence = "q C-u C-d"
-" Run the current file with rspec
-nnoremap <leader>rs :w<cr>:call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
-" Run the current file with ruby
-nnoremap <leader>rr :w<cr>:call VimuxRunCommand("clear; ruby " . bufname("%"))<CR>
-" Run the current file with python3
-nnoremap <leader>3 :w<cr>:call VimuxRunCommand("clear; python " . bufname("%"))<CR>
-" Run the current file with python2
-nnoremap <leader>2 :w<cr>:call VimuxRunCommand("clear; python2 " . bufname("%"))<CR>
-" Run the current file with bash
-nnoremap <leader>1 :w<cr>:call VimuxRunCommand("clear; bash " . bufname("%"))<CR>
-" Prompt for a command to run
-nnoremap <leader>rp :VimuxPromptCommand<CR>
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
@@ -373,7 +369,7 @@ fun! HandleURI()
       if has("win32") 
           exec "silent !start rundll32.exe url.dll,FileProtocolHandler " . l:uri 
       else 
-          exec "silent !open \"" . l:uri . "\"" 
+          exec "silent !xdg-open \"" . fnameescape(l:uri) . "\"" 
       endif 
       echo "Opened URI: " . l:uri 
   else
@@ -385,6 +381,10 @@ endfun
 command! -range=% JSON <line1>,<line2>call PrettyJSON()
 fun! PrettyJSON() range
    exe a:firstline . "," . a:lastline . "!python2 -mjson.tool"
+endfun
+" Mksession {{{2
+fun! Mks(path)
+   exe "mksession! ".a:path."/".fnamemodify(a:path, ':t').".session"
 endfun
 " Greek {{{1
 map! <C-v>GA Γ
