@@ -1,15 +1,30 @@
 [user]
 	name = Conner McDaniel
 	email = connermcd@gmail.com
-[push]
-	default = tracking
-[mergetool]
-	keepBackup = false
-[merge]
-	tool = fugitive
-[color]
-	ui = true
-[mergetool "fugitive"]
-	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
 [github]
 	user = connermcd
+[push]
+	default = tracking
+[merge]
+	tool = fugitive
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+	keepBackup = false
+[color]
+	ui = auto
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	di = diff
+	dc = diff --cached
+	aa = add --all
+	ff = merge --ff-only
+	pullff = pull --ff-only
+	noff = merge --no-ff
+	pom = push origin master
+	b = branch
+	ds = diff --stat=160,120
+	dh1 = diff HEAD~1
+	l = "!. ~/.githelpers && pretty_git_log"
+	l = log --graph --pretty="tformat:%C(yellow)%h%Creset\\ %Cgreen(%ar)%Creset\\ %C(blue)<%an>%Creset\\ %C(red)%d%Creset\\ %s"
