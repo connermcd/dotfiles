@@ -16,6 +16,7 @@
 	st = status
 	ci = commit
 	co = checkout
+	cb = checkout -b
 	di = diff
 	dc = diff --cached
 	aa = add --all
@@ -26,5 +27,4 @@
 	b = branch
 	ds = diff --stat=160,120
 	dh1 = diff HEAD~1
-	l = "!. ~/.githelpers && pretty_git_log"
 	l = log --graph --pretty="tformat:%C(yellow)%h%Creset\\ %Cgreen(%ar)%Creset\\ %C(blue)<%an>%Creset\\ %C(red)%d%Creset\\ %s"

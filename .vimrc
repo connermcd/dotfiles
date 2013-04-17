@@ -21,6 +21,8 @@ Bundle 'tpope/vim-rails'
 Bundle 'avelino/snipmate.vim'
 Bundle 'tpope/vim-haml'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'wavded/vim-stylus'
+Bundle 'briancollins/vim-jst'
 
 filetype plugin indent on
 syntax enable
@@ -62,6 +64,7 @@ set smartcase
 set smartindent
 set spelllang=eng
 set tabstop=4
+set tags=tags;$HOME
 set timeoutlen=600
 set ttyfast
 set visualbell t_vb=".
@@ -96,17 +99,15 @@ else
 endif
 " Leaders {{{1
 inoremap <leader>\ \<esc>a
-inoremap <leader>l <esc>:TlistToggle<cr>
 inoremap <leader>q <esc>:q!<cr>
 inoremap <leader>s <esc>:set spell!<cr>a
 inoremap <leader>w <esc>:w<cr>a
 inoremap <leader>x <esc>:sign unplace *<cr>a
 inoremap <leader>z <esc>:wq!<cr>
-nnoremap <leader>\ :w<bar>mak<cr>
+nnoremap <leader>\ :w<cr>:mak<cr>
 nnoremap <leader>. :cd %:h<cr>
 nnoremap <leader>c :s/.*/\L&/<bar>:s/\<./\u&/g<cr>
 nnoremap <leader>d "_d
-nnoremap <leader>l :TlistToggle<cr>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
 nnoremap <leader>u :w!<cr>:exe "!unotes"<cr>:redraw!<cr>:echo "Notes updated."<cr>
@@ -117,7 +118,7 @@ vnoremap <leader>d "_d
 vnoremap <leader>q <esc>:q!<cr>
 " Pandoc and Notes {{{1
 let g:module = system('echo -n "$MODULE"')
-command! -nargs=1 Nls Ack -i --text --nohtml "<args>" $HOME/Dropbox/Notes/**/*.txt
+command! -nargs=1 Nls Ack -i --text --nohtml "<args>" $HOME/Dropbox/Notes/*/*/*.txt
 command! -nargs=1 Note exe "e! " . fnameescape($HOME."/Dropbox/Notes/mod" . g:module . "/<args>.txt")
 command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
@@ -129,6 +130,7 @@ nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes
 nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
 inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
+inoremap <C-l> <space>=><space>
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 inoremap <bar>( <esc>d(s
@@ -143,18 +145,14 @@ nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
 nnoremap Q :exe "try <bar> tabc! <bar> catch /E784/ <bar> qa! <bar> endtry"<cr>
 vnoremap K k
-xnoremap p p:let @" = @0<cr>:<bs>
 vnoremap & :s<cr>
 
 nnoremap <leader>r :nnoremap <leader>r :!
 
-" Remove duplicate lines (and empty lines unfortunately)
-com! RemoveDuplicateLines %!awk '\!x[$0]++'
-
 nnoremap g<C-n> gt
 nnoremap g<C-p> gT
-" nnoremap zp :norm! G{jzt13<C-y>G$<cr>
 nnoremap zp Gzt13<C-y>G$
+
 command! W w !sudo tee % &>/dev/null
 command! Mks let g:session = getcwd() <bar> call Mks(g:session)
 
@@ -175,7 +173,7 @@ augroup markdown " {{{2
    au!
    " au BufEnter * if &filetype == "" && expand('%:t') != "__XtermColorTable__" | setl ft=markdown | endif
    au BufNewFile,BufRead,BufWrite *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown
-   au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $HOME/Dropbox/Tech/web/octopress/source
+   au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG/source
    " au BufRead,BufNewFile,BufEnter */mod*/*.txt let &complete="k$HOME/Dropbox/Notes/mod".g:module."/*.txt"
    au BufEnter * let &complete=".,w,b,u,t,i"
    au BufRead,BufNewFile,BufEnter   */mod*/*.txt let &complete="k$HOME/Dropbox/Notes/**/*.txt"
@@ -192,7 +190,9 @@ augroup nonvim " {{{2
 augroup end
 augroup filetypes " {{{2
    au!
+   au BufNewFile,BufRead,BufWrite todo.txt setl ft=todotxt
    au BufNewFile,BufRead,BufWrite *.csv setl ft=csv
+   au FileType coffee  nnoremap <leader><leader> :CoffeeRun<cr>
    au FileType ruby    setl sw=2 makeprg=ruby\ % efm=
       \%+E%f:%l:\ parse\ error,
       \%W%f:%l:\ warning:\ %m,
@@ -215,9 +215,9 @@ augroup filetypes " {{{2
    au FileType python  nnoremap <leader>p Yp^Cinteract()<Esc>
    au FileType xml     set equalprg=xmllint\ --format\ --recover\ -
    au FileType mail    let mapleader = "\\" | let maplocalleader = "," | setl spell fo=wantq1 smc=0
-   au FileType cpp     set makeprg=g++\ %\ &&\ ./a.out
+   au FileType cpp     set makeprg=g++\ \-lpcrecpp\ %\ &&\ ./a.out
    au FileType haskell set nocul cocu=in
-   " au FileType help    set iskeyword=!-~,^*,^|,^"
+   au FileType gitcommit start!
 augroup end
 augroup vimrc " {{{2
    au!
@@ -244,7 +244,7 @@ nnoremap 'l  :FufTag<cr>
 nnoremap 'n  :FufFile $HOME/Dropbox/Notes/mod<c-r>=g:module<cr>/<cr>
 nnoremap 'p  :e! $HOME/Dropbox/Archive/Important/passwords.gpg<cr>
 nnoremap 'r  :e! $HOME/.bashrc<cr><cr>
-nnoremap 's  :FufFile $HOME/.bin/<cr>
+nnoremap 's  :FufFile spec/<cr>
 nnoremap 't  :cd %:p:h<cr>:sh<cr>:cd -<cr>
 nnoremap 'v  :e! $MYVIMRC<cr><cr>
 nnoremap 'w  :FufFile $HOME/Dropbox/Tech/web/<cr>
@@ -256,15 +256,10 @@ nnoremap ** :exe "norm v$hS*"<cr>
 nnoremap __ :exe "norm v$hS_"<cr>
 vmap * S*
 vmap _ S_
-" taglist {{{2
-let Tlist_Ctags_Cmd = "/usr/bin/ctags"
-let Tlist_WinWidth = 50
-let Tlist_Use_Right_Window = 1
-let Tlist_File_Fold_Auto_Close = 1
-let Tlist_Auto_Update = 1
-let Tlist_Auto_Highlight_Tag = 1
 " tComment {{{2
 let g:tcommentGuessFileType_markdown = 'html'
+" Syntastic {{{2
+let g:syntastic_javascript_checkers = ['jshint']
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
@@ -284,9 +279,9 @@ fun! HtmlPaste() range
        \      $('.Folded').show();\r
        \});
        \</script>#"
-   exe "sav! $HOME/Dropbox/Tech/web/octopress/source/paste/" . curTime . ".html"
+   exe "sav! $BLOG/source/paste/" . curTime . ".html"
    wincmd c
-   exe "silent !rsync -a --del $HOME/Dropbox/Tech/web/octopress/source/paste connermcd@connermcd.com:/web"
+   exe "silent !rsync -a --del $BLOG/source/paste connermcd@connermcd.com:/web"
    exe "silent !echo \"http://connermcd.com/paste/" . curTime . ".html\" | xclip"
    redraw!
 endfun
@@ -340,8 +335,8 @@ fun! TagComplete(findstart, base)
     endwhile
     return start
   else
-    let tags = split(system("ls $HOME/Dropbox/Tech/web/octopress/public/blog/tags"), "\n")
-    let cats = split(system("ls $HOME/Dropbox/Tech/web/octopress/public/blog/categories"), "\n")
+    let tags = split(system("ls $BLOG/public/blog/tags"), "\n")
+    let cats = split(system("ls $BLOG/public/blog/categories"), "\n")
     let res = []
     for m in tags + cats
        if m =~ '^' . a:base
@@ -352,12 +347,12 @@ fun! TagComplete(findstart, base)
   endif
 endfun
 " NewPost {{{2
-nnoremap 'bb :FufFile $HOME/Dropbox/Tech/web/octopress/source/_posts/<cr>
+nnoremap 'bb :FufFile $BLOG/source/_posts/<cr>
 nnoremap 'bn :NewPost 
-nnoremap 'bp :!cd $HOME/Dropbox/Tech/web/octopress && rake gen_deploy && cd -<cr>
+nnoremap 'bp :!cd $BLOG && rake gen_deploy && cd -<cr>
 command! -nargs=1 NewPost call NewPost("<args>")
 fun! NewPost(args)
-   let file = "$HOME/Dropbox/Tech/web/octopress/source/_posts/" . strftime("%Y-%m-%d") . "-" . tolower(substitute(a:args, " ", "-", "g")) . ".markdown"
+   let file = "$BLOG/source/_posts/" . strftime("%Y-%m-%d") . "-" . tolower(substitute(a:args, " ", "-", "g")) . ".markdown"
    exe "e!" . file
    let g:post_title = a:args
 endfun

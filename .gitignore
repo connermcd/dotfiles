@@ -15,4 +15,6 @@
 !.vimrc
 !.xbindkeysrc
 !.xinitrc
+!.xmobarrc
+!.xmonad/xmonad.hs
 !.zathurarc

@@ -16,11 +16,13 @@ xbacklight -set 50
 xdotool key Num_Lock
 
 eval $(cat ~/.fehbg)
-tint2 &
 emerald &
 # conky &
 
 /usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
 /usr/bin/notify-listener.py &>/dev/null &
 
-exec compiz ccp
+#tint2 &
+
+exec xmonad
+#exec compiz ccp
