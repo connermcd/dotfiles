@@ -15,6 +15,7 @@ import Graphics.X11.ExtraTypes.XF86
  
 -- actions
 import XMonad.Actions.GridSelect
+import XMonad.Actions.CycleWS
  
 -- hooks
 import XMonad.Hooks.DynamicLog
@@ -27,7 +28,6 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Renamed
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Fullscreen
  
 -------------------------------------------------------------------------------
 -- Main --
@@ -50,6 +50,7 @@ myConfig = defaultConfig { workspaces = workspaces'
                          , focusedBorderColor = focusedBorderColor'
                          , terminal = terminal'
                          , keys = keys'
+                         , mouseBindings = mouseBindings'
                          , layoutHook = layoutHook'
                          , manageHook = manageHook'
                          }
@@ -60,6 +61,7 @@ manageHook' = composeAll [ isFullscreen             --> doFullFloat
                          , className =? "MPlayer"   --> doFloat
                          , className =? "Gimp"      --> doFloat
                          , className =? "Vlc"       --> doFloat
+                         , className =? "feh"       --> doFloat
                          , insertPosition Below Newer
                          , transience'
                          ]
@@ -118,13 +120,13 @@ modMask' = mod4Mask
  
 -- keys
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask .|. shiftMask, xK_b)
  
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- launching and killing programs
-    [ ((modMask,               xK_Return), safeSpawn (XMonad.terminal conf) [])
-    , ((modMask,               xK_p     ), safeSpawn "dmenu_run" [])
+    [ ((modMask,               xK_Return), safeSpawn terminal' [])
+    , ((modMask,               xK_p     ), safeSpawn "dmenu_run" ["-b", "-nb", "black"])
     , ((modMask .|. shiftMask, xK_c     ), kill)
  
     -- multimedia
@@ -132,30 +134,36 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((0, xF86XK_AudioLowerVolume      ), safeSpawn "amixer" ["-q", "set", "Master", "1-"])
     , ((0, xF86XK_AudioMute             ), safeSpawn "amixer" ["-q", "set", "Master", "toggle"])
  
-    --, ((0, xF86XK_AudioPlay             ), safeSpawn "mocp" ["-G"])
-    --, ((0, xF86XK_AudioNext             ), safeSpawn "mocp" ["-f"])
-    --, ((0, xF86XK_AudioPrev             ), safeSpawn "mocp" ["-r"])
- 
-    , ((modMask .|. shiftMask, xK_z     ), safeSpawn "i3lock" ["-c", "000000", "-n"])
+    -- , ((modMask .|. shiftMask, xK_z     ), safeSpawn "i3lock" ["-c", "000000", "-n"])
     -- grid
     , ((modMask,               xK_g     ), goToSelected myGSConfig)
- 
+
     -- layouts
     , ((modMask,               xK_space ), sendMessage NextLayout)
     , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
  
     -- floating layer stuff
-    , ((modMask,               xK_t     ), withFocused $ windows . W.sink)
+    , ((modMask,               xK_f     ), withFocused $ windows . W.sink)
  
     -- refresh
-    , ((modMask,               xK_n     ), refresh)
+    , ((modMask,               xK_r     ), refresh)
  
     -- focus
     , ((modMask,               xK_Tab   ), windows W.focusDown)
     , ((modMask,               xK_j     ), windows W.focusDown)
     , ((modMask,               xK_k     ), windows W.focusUp)
     , ((modMask,               xK_m     ), windows W.focusMaster)
- 
+
+    -- workspaces
+    , ((modMask,               xK_d     ), toggleWS)
+    , ((modMask,               xK_p     ), prevWS)
+    , ((modMask,               xK_n     ), nextWS)
+    , ((modMask .|. shiftMask, xK_p     ), shiftToPrev >> prevWS)
+    , ((modMask .|. shiftMask, xK_n     ), shiftToNext >> nextWS)
+
+    -- screens
+    , ((modMask,               xK_o     ), nextScreen)
+
     -- swapping
     , ((modMask .|. shiftMask, xK_Return), windows W.swapMaster)
     , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  )
@@ -181,11 +189,28 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     [((m .|. modMask, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
+    -- ++
     -- mod-[w,e] %! switch to twinview screen 1/2
     -- mod-shift-[w,e] %! move window to screen 1/2
-    [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
- 
+    -- [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    --     | (key, sc) <- zip [xK_w, xK_e] [0..]
+    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+-------------------------------------------------------------------------------
+-- Mouse Bindings
+
+button6 :: Button
+button6 = 6 :: Button
+
+button7 :: Button
+button7 = 7 :: Button
+
+mouseBindings' :: XConfig Layout -> M.Map (ButtonMask, Button) (Window -> X ())
+mouseBindings' (XConfig {XMonad.modMask = modMask}) = M.fromList
+  [ ((0      , button6), \w -> focus w >> prevWS)
+  , ((0      , button7), \w -> focus w >> nextWS)
+  , ((modMask, button6), \w -> focus w >> shiftToPrev >> prevWS)
+  , ((modMask, button7), \w -> focus w >> shiftToNext >> nextWS)
+  ]
+
 -------------------------------------------------------------------------------

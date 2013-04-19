@@ -60,9 +60,11 @@ hi Todo           guifg=#a1481e   guibg=NONE      guisp=NONE      gui=NONE   cte
 " Linking
 hi! link          FoldColumn      Folded
 hi! link          CursorColumn    CursorLine
+hi! link          Search          CursorLine
 hi! link          NonText         LineNr
 hi! link          DiffText        DiffChange
 hi! link          SpellBad        ErrorMsg
+hi! link          SpellCap        ErrorMsg
 hi! link          Error           ErrorMsg
 hi! link          Question        MoreMsg
 hi! link          htmlBold        Special
@@ -86,7 +88,6 @@ hi! link          Title           Function
 " Scrollbar
 " SignColumn
 " SpellBad
-" SpellCap
 " SpellLocal
 " SpellRare
 " TabLine

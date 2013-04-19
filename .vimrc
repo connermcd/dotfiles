@@ -57,9 +57,12 @@ set nohlsearch
 set nojoinspaces
 set number
 set omnifunc=syntaxcomplete#Complete
+set shiftround
 set shiftwidth=4
 set showcmd
 set shortmess=filnxtToOI
+set splitbelow
+set splitright
 set smartcase
 set smartindent
 set spelllang=eng
@@ -216,7 +219,7 @@ augroup filetypes " {{{2
    au FileType xml     set equalprg=xmllint\ --format\ --recover\ -
    au FileType mail    let mapleader = "\\" | let maplocalleader = "," | setl spell fo=wantq1 smc=0
    au FileType cpp     set makeprg=g++\ \-lpcrecpp\ %\ &&\ ./a.out
-   au FileType haskell set nocul cocu=in
+   au FileType haskell set nocul cocu=in makeprg=ghc\ %
    au FileType gitcommit start!
 augroup end
 augroup vimrc " {{{2
@@ -260,6 +263,7 @@ vmap _ S_
 let g:tcommentGuessFileType_markdown = 'html'
 " Syntastic {{{2
 let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_enable_highlighting = 0
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
