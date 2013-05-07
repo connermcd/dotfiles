@@ -3,7 +3,7 @@ set editor              = "vim -c start"
 set realname            = "Conner McDaniel"
 
 source ~/.mutt/accounts/gmail
-# source ~/.mutt/muttgpg
+source ~/.mutt/muttgpg
 source ~/.mutt/keybindings
 source ~/.mutt/colorscheme
 

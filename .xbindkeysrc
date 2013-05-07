@@ -1,5 +1,5 @@
 # System Control {{{1
-"slock"
+"lock-screen"
   control + mod4 + q
 "sudo shutdown -h 0"
   control + mod4 + Delete
@@ -11,7 +11,7 @@
 "thunar"
   mod4 + t
 "search-courses"
-  Control + mod4 + f
+  control + mod4 + f
 # Brightness control {{{1
 "xbacklight -inc 20"
    XF86MonBrightnessUp
@@ -19,18 +19,18 @@
    XF86MonBrightnessDown
 # Sound control {{{1
 "amixer set \"Master\" toggle"
-   shift + mod4 + m
+   control + mod4 + m
 "amixer set \"Master\" 5%+"
-   shift + mod4 + k
+   control + mod4 + k
 "amixer set \"Master\" 5%-"
-   shift + mod4 + j
+   control + mod4 + j
 # MPD media keys {{{1
 "mpc prev"
-   shift + mod4 + h
+   control + mod4 + h
 "mpc next"
-   shift + mod4 + l
+   control + mod4 + l
 "mpc toggle"
-   shift + mod4 + space
+   control + mod4 + space
 # Option + hjkl {{{1
 "xdotool keyup alt+h && xdotool key Left && xdotool keydown alt"
    Alt + h

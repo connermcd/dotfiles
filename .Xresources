@@ -1,7 +1,10 @@
+Xcursor.theme         : Bluecurve
+
 URxvt*depth           : 32
 URxvt*buffered        : true
 URxvt*foreground      : #aaaaaa
-URxvt*background      : [85]#000000
+! URxvt*background      : [85]#000000
+URxvt*background      : #000000
 URxvt*shading         : 30
 URxvt*fading          : 10%
 URxvt*internalBorder  : 5

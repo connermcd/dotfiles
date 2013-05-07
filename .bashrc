@@ -17,7 +17,7 @@ export BLOG=$HOME/Dropbox/Tech/projects/ruby/octopress
 # Notes {{{2
 export YEAR=2
 export MODULE=9
-export NOTES_DIR=$HOME/Dropbox/Notes
+export NOTES_DIR=$HOME/Dropbox/Courses/Notes
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -52,12 +52,12 @@ alias myip="curl http://myip.dnsomatic.com && echo ''"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 # flags {{{2
 alias bd="cd $BLOG && bundle exec rake gen_deploy && cd -"
-alias nack="ack --text --nohtml"
 alias pandoc="pandoc --latex-engine=lualatex"
 alias pretty-json="python2 -mjson.tool"
 alias screencast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-sys-out="ffmpeg -f alsa -ac 2 -i hw:0,1 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
+alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias wifi="wicd-cli -y"
 # alias sudo="sudo -E"
 # gcalcli {{{2
@@ -76,8 +76,8 @@ alias draw="libreoffice --draw"
 function speed {
    </dev/null ffmpeg -i "$*" -filter atempo=1.5 "${*%%.mp3}-150.mp3"
 }
-function nls {
-   vim -c "Nls $*"
+function nack {
+   vim -c "Nack $*"
 }
 function t {
    todo=/home/connermcd/Dropbox/Tech/todo/todo.sh

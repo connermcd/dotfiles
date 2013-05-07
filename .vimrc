@@ -6,23 +6,23 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-Bundle 'vim-scripts/FuzzyFinder'
-Bundle 'vim-scripts/L9'
+Bundle 'avelino/snipmate.vim'
+Bundle 'briancollins/vim-jst'
+Bundle 'godlygeek/tabular'
+Bundle 'jamessan/vim-gnupg'
+Bundle 'kchmck/vim-coffee-script'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
-Bundle 'vim-scripts/tComment'
-Bundle 'godlygeek/tabular'
 Bundle 'tpope/vim-fugitive'
-Bundle 'jamessan/vim-gnupg'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'tpope/vim-rails'
-Bundle 'avelino/snipmate.vim'
-Bundle 'tpope/vim-haml'
-Bundle 'kchmck/vim-coffee-script'
+Bundle 'vim-scripts/FuzzyFinder'
+Bundle 'vim-scripts/L9'
+Bundle 'vim-scripts/tComment'
 Bundle 'wavded/vim-stylus'
-Bundle 'briancollins/vim-jst'
 
 filetype plugin indent on
 syntax enable
@@ -101,12 +101,6 @@ else
    nnoremap <RightMouse> "+]p
 endif
 " Leaders {{{1
-inoremap <leader>\ \<esc>a
-inoremap <leader>q <esc>:q!<cr>
-inoremap <leader>s <esc>:set spell!<cr>a
-inoremap <leader>w <esc>:w<cr>a
-inoremap <leader>x <esc>:sign unplace *<cr>a
-inoremap <leader>z <esc>:wq!<cr>
 nnoremap <leader>\ :w<cr>:mak<cr>
 nnoremap <leader>. :cd %:h<cr>
 nnoremap <leader>c :s/.*/\L&/<bar>:s/\<./\u&/g<cr>
@@ -120,12 +114,13 @@ nnoremap <leader>z :wq!<cr>
 vnoremap <leader>d "_d
 vnoremap <leader>q <esc>:q!<cr>
 " Pandoc and Notes {{{1
+let g:year = system('echo -n "$YEAR"')
 let g:module = system('echo -n "$MODULE"')
-command! -nargs=1 Nls Ack -i --text --nohtml "<args>" $HOME/Dropbox/Notes/*/*/*.txt
-command! -nargs=1 Note exe "e! " . fnameescape($HOME."/Dropbox/Notes/mod" . g:module . "/<args>.txt")
+command! -nargs=1 Nack Ack -i --text --nohtml "<args>" $NOTES_DIR/*/*/*.txt
+command! -nargs=1 Note exe "e! " . fnameescape($NOTES_DIR . "/MS". g:year . "/mod" . g:module . "/<args>.txt")
 command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
-nnoremap <leader>[ :Nls 
+nnoremap <leader>[ :Nack 
 nnoremap <leader>] :Note 
 
 nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
@@ -174,12 +169,10 @@ cnoremap <C-n> <Down>
 " Autocommands {{{1
 augroup markdown " {{{2
    au!
-   " au BufEnter * if &filetype == "" && expand('%:t') != "__XtermColorTable__" | setl ft=markdown | endif
    au BufNewFile,BufRead,BufWrite *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown
    au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG/source
-   " au BufRead,BufNewFile,BufEnter */mod*/*.txt let &complete="k$HOME/Dropbox/Notes/mod".g:module."/*.txt"
    au BufEnter * let &complete=".,w,b,u,t,i"
-   au BufRead,BufNewFile,BufEnter   */mod*/*.txt let &complete="k$HOME/Dropbox/Notes/**/*.txt"
+   au BufRead,BufNewFile,BufEnter   */mod*/*.txt let &complete="k$NOTES_DIR/**/*.txt"
    au BufRead,BufNewFile,BufEnter   */mod*/*.txt lcd %:h
    au BufRead,BufWrite,InsertChange */mod*/*.txt syn match ErrorMsg '\%>77v.\+'
 augroup end

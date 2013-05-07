@@ -1,13 +1,13 @@
-Config { font = "xft:inconsolata:size=12:antialias=true"
-    , bgColor = "#222222"
-    , fgColor = "#aaaaaa"
+Config { font = "xft:Inconsolata:size=12,xft:Monospace"
+    , bgColor = "#101010"
+    , fgColor = "#a8a8a8"
     , position = Top
     , lowerOnStart = True
     , commands = [ Run Network "eth0" ["-t", "<fc=#556B2F><rx> ↓</fc> <fc=#B22222><tx> ↑</fc>","-S","True"] 10
                  , Run Network "wlan0" ["-t", "<fc=#556B2F><rx> ↓</fc> <fc=#B22222><tx> ↑</fc>","-S","True"] 10
                  , Run MultiCpu ["-t", "C: <total>%", "-H","50","--high","#B22222"] 10
                  , Run Memory ["-t","M: <usedratio>%","-H","80","--high","#B22222"] 10
-                 , Run Date "<fc=#ffffff>%_d %b %H:%M</fc>" "date" 10
+                 , Run Date "<fc=#ffffff>%a %m/%d %I:%M %P</fc>" "date" 10
                  , Run MPD ["-t", "<artist> - <fc=#ffffff><title></fc> (<album>) <statei>", "--", "-P", ">>", "-Z", "=", "-S", "><"] 10
                  , Run BatteryP ["BAT0"] ["-t", "B: <left>%", "-L", "10", "-H", "80", "-p", "3", "--", "-O", "<fc=green>On</fc> - ", "-o", "", "-L", "-15", "-H", "-5", "-l", "red", "-m", "blue", "-h", "green"] 600
                  , Run StdinReader

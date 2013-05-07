@@ -28,7 +28,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Renamed
 import XMonad.Layout.Tabbed
- 
+
 -------------------------------------------------------------------------------
 -- Main --
 main :: IO ()
@@ -101,16 +101,18 @@ tabTheme1 = defaultTheme { decoHeight = 16
 workspaces' = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
  
 -- layouts
-layoutHook' = tile ||| mtile ||| tab ||| full
+-- layoutHook' = tile ||| mtile ||| tab ||| full
+layoutHook' = tile ||| full
   where
     rt = ResizableTall 1 (2/100) (1/2) []
     tile = renamed [Replace "[]="] $ smartBorders rt
-    mtile = renamed [Replace "M[]="] $ smartBorders $ Mirror rt
-    tab = renamed [Replace "T"] $ noBorders $ tabbed shrinkText tabTheme1
+    -- mtile = renamed [Replace "M[]="] $ smartBorders $ Mirror rt
+    -- tab = renamed [Replace "T"] $ noBorders $ tabbed shrinkText tabTheme1
     full = renamed [Replace "[]"] $ noBorders Full
  
 -------------------------------------------------------------------------------
 -- Terminal --
+terminal' :: String
 terminal' = "urxvt"
  
 -------------------------------------------------------------------------------
@@ -126,7 +128,7 @@ keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- launching and killing programs
     [ ((modMask,               xK_Return), safeSpawn terminal' [])
-    , ((modMask,               xK_p     ), safeSpawn "dmenu_run" ["-b", "-nb", "black"])
+    , ((modMask,               xK_space ), safeSpawn "dmenu_run" ["-b", "-nb", "black"])
     , ((modMask .|. shiftMask, xK_c     ), kill)
  
     -- multimedia
@@ -139,11 +141,11 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_g     ), goToSelected myGSConfig)
 
     -- layouts
-    , ((modMask,               xK_space ), sendMessage NextLayout)
-    , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ((modMask,               xK_f     ), sendMessage NextLayout)
+    -- , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
  
     -- floating layer stuff
-    , ((modMask,               xK_f     ), withFocused $ windows . W.sink)
+    , ((modMask .|. shiftMask, xK_f     ), withFocused $ windows . W.sink)
  
     -- refresh
     , ((modMask,               xK_r     ), refresh)
@@ -163,6 +165,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- screens
     , ((modMask,               xK_o     ), nextScreen)
+    , ((modMask .|. shiftMask, xK_o     ), shiftNextScreen >> nextScreen)
 
     -- swapping
     , ((modMask .|. shiftMask, xK_Return), windows W.swapMaster)
@@ -180,7 +183,7 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_l     ), sendMessage MirrorExpand)
  
     -- quit, or restart
-    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+    , ((modMask .|. shiftMask, xK_q     ), io exitSuccess)
     , ((modMask              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
     ]
     ++
@@ -199,18 +202,14 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 -------------------------------------------------------------------------------
 -- Mouse Bindings
 
-button6 :: Button
-button6 = 6 :: Button
-
-button7 :: Button
-button7 = 7 :: Button
-
 mouseBindings' :: XConfig Layout -> M.Map (ButtonMask, Button) (Window -> X ())
 mouseBindings' (XConfig {XMonad.modMask = modMask}) = M.fromList
-  [ ((0      , button6), \w -> focus w >> prevWS)
-  , ((0      , button7), \w -> focus w >> nextWS)
-  , ((modMask, button6), \w -> focus w >> shiftToPrev >> prevWS)
-  , ((modMask, button7), \w -> focus w >> shiftToNext >> nextWS)
+  [ ((modMask, 1 :: Button), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)
+  , ((modMask, 3 :: Button), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster)
+  , ((0      , 6 :: Button), \w -> focus w >> prevWS)
+  , ((0      , 7 :: Button), \w -> focus w >> nextWS)
+  , ((modMask, 6 :: Button), \w -> focus w >> shiftToPrev >> prevWS)
+  , ((modMask, 7 :: Button), \w -> focus w >> shiftToNext >> nextWS)
   ]
 
 -------------------------------------------------------------------------------
