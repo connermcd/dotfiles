@@ -1,4 +1,4 @@
-set window playlist "testing comment
+set window playlist
 set autoscroll
 set colour
 set hlsearch
@@ -8,6 +8,8 @@ set sortignorethe
 set sortignorecase
 set mouse
 set songformat {%a - %b - %t}|{%f}$E$R $H[$H%l$H]$H
+" set songformat {%?}|{%f}$E$R $H[$H%l$H]$H
+" set songformat {{%?}|{%?}}|{%f}$E$R $H[$H%l$H]$H
 
 map q ZQ
 map Q ZQ
@@ -26,3 +28,5 @@ hi tab blackbg
 hi status blackbg
 hi current greenfg
 hi id yellowfg
+
+" vim: ft=vim

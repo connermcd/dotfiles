@@ -116,14 +116,14 @@ vnoremap <leader>q <esc>:q!<cr>
 " Pandoc and Notes {{{1
 let g:year = system('echo -n "$YEAR"')
 let g:module = system('echo -n "$MODULE"')
-command! -nargs=1 Nack Ack -i --text --nohtml "<args>" $NOTES_DIR/*/*/*.txt
+command! -nargs=1 Nack Ack -i --type *.txt "<args>" $NOTES_DIR/*/*/*.txt
 command! -nargs=1 Note exe "e! " . fnameescape($NOTES_DIR . "/MS". g:year . "/mod" . g:module . "/<args>.txt")
 command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
 nnoremap <leader>[ :Nack 
 nnoremap <leader>] :Note 
 
-nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $NOTES_DIR/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
 nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
 nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
@@ -442,17 +442,17 @@ inoremap <leader>-- ^-^
 inoremap <leader>-2 ^2-^
 inoremap <leader>-3 ^3-^
 " Extended Text Objects {{{1
-let items = [ "<bar>", "\\", "/", ":", ".", "*", "_" ]
-for item in items
-  exe "nnoremap yi".item." T".item."yt".item
-  exe "nnoremap ya".item." F".item."yf".item
-  exe "nnoremap ci".item." T".item."ct".item
-  exe "nnoremap ca".item." F".item."cf".item
-  exe "nnoremap di".item." T".item."dt".item
-  exe "nnoremap da".item." F".item."df".item
-  exe "nnoremap vi".item." T".item."vt".item
-  exe "nnoremap va".item." F".item."vf".item
-endfor
-nnoremap viz v[zo]z$
+" let items = [ "<bar>", "\\", "/", ":", ".", "*", "_" ]
+" for item in items
+"   exe "nnoremap yi".item." T".item."yt".item
+"   exe "nnoremap ya".item." F".item."yf".item
+"   exe "nnoremap ci".item." T".item."ct".item
+"   exe "nnoremap ca".item." F".item."cf".item
+"   exe "nnoremap di".item." T".item."dt".item
+"   exe "nnoremap da".item." F".item."df".item
+"   exe "nnoremap vi".item." T".item."vt".item
+"   exe "nnoremap va".item." F".item."vf".item
+" endfor
+" nnoremap viz v[zo]z$
 
 " }}} vim: fdm=marker

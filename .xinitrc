@@ -34,6 +34,9 @@ eval $(cat ~/.fehbg)
 /usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
 /usr/bin/notify-listener.py &>/dev/null &
 
+# offlineimap
+offlineimap -u quiet &
+
 # xcompmgr -cfD 5 &
 exec xmonad
 

@@ -14,6 +14,9 @@ export BROWSER=/usr/bin/chromium
 export EDITOR=vim
 export HISTSIZE=1000
 export BLOG=$HOME/Dropbox/Tech/projects/ruby/octopress
+export RED='\033[0;31m'
+export GREEN='\033[0;32m'
+export RESET_COLOR='\033[0m'
 # Notes {{{2
 export YEAR=2
 export MODULE=9
