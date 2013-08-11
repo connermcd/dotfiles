@@ -6,15 +6,13 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-Bundle 'avelino/snipmate.vim'
-Bundle 'briancollins/vim-jst'
+" Bundle 'garbas/vim-snipmate'
 Bundle 'godlygeek/tabular'
 Bundle 'jamessan/vim-gnupg'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
@@ -22,7 +20,7 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/FuzzyFinder'
 Bundle 'vim-scripts/L9'
 Bundle 'vim-scripts/tComment'
-Bundle 'wavded/vim-stylus'
+Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on
 syntax enable
@@ -123,9 +121,9 @@ command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 nnoremap <leader>[ :Nack 
 nnoremap <leader>] :Note 
 
-nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $NOTES_DIR/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
-nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
-nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H $HOME/Dropbox/Notes/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
+nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
 inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
 inoremap <C-l> <space>=><space>
@@ -252,6 +250,7 @@ nnoremap ** :exe "norm v$hS*"<cr>
 nnoremap __ :exe "norm v$hS_"<cr>
 vmap * S*
 vmap _ S_
+vmap <leader>l <Plug>VSurround]%a(<C-r><C-p>+)<Esc>
 " tComment {{{2
 let g:tcommentGuessFileType_markdown = 'html'
 " Syntastic {{{2

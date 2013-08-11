@@ -22,6 +22,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.InsertPosition
+import XMonad.Hooks.EwmhDesktops
  
 -- layouts
 import XMonad.Layout.NoBorders
@@ -53,6 +54,7 @@ myConfig = defaultConfig { workspaces = workspaces'
                          , mouseBindings = mouseBindings'
                          , layoutHook = layoutHook'
                          , manageHook = manageHook'
+                         , handleEventHook = fullscreenEventHook
                          }
  
 -------------------------------------------------------------------------------

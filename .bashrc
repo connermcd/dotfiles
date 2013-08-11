@@ -13,7 +13,7 @@ bind TAB:menu-complete
 export BROWSER=/usr/bin/chromium
 export EDITOR=vim
 export HISTSIZE=1000
-export BLOG=$HOME/Dropbox/Tech/projects/ruby/octopress
+export BLOG=$HOME/Dropbox/Tech/projects/ruby/blog
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
@@ -35,14 +35,16 @@ alias cleanvim="vim -N -u NONE"
 alias em="mutt"
 alias htop="sudo htop"
 alias i="irssi"
-alias linode="ssh connermcd@connermcd.com"
+alias linode="ssh connermcd@linode"
 alias m="vimpc"
+alias mplayer-hdmi="mplayer -ao alsa:noblock:device=hw=0,3"
 alias nstech="ssh connermcd@nstech"
 alias open="xdg-open"
+alias pi="ssh connermcd@pi"
 alias py="python"
 alias py2="python2"
 alias r="rails"
-alias tm="tmux"
+alias tm="tmux new-session -s main"
 alias tma="tmux attach"
 alias trans="transmission-cli"
 alias unneeded="sudo pacman -Rsn \$(pacman -Qqdt)"
@@ -54,13 +56,14 @@ alias ls='ls --color=auto'
 alias myip="curl http://myip.dnsomatic.com && echo ''"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 # flags {{{2
-alias bd="cd $BLOG && bundle exec rake gen_deploy && cd -"
+alias bd="cd $BLOG && bundle exec rake generate && bundle exec rake rsync && cd -"
 alias pandoc="pandoc --latex-engine=lualatex"
 alias pretty-json="python2 -mjson.tool"
 alias screencast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-sys-out="ffmpeg -f alsa -ac 2 -i hw:0,1 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
+alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias wifi="wicd-cli -y"
 # alias sudo="sudo -E"
 # gcalcli {{{2
@@ -112,3 +115,5 @@ pathadd $HOME/.rbenv/bin
 pathadd $HOME/.gem/ruby/2.0.0/bin
 eval "$(rbenv init -)"
 # }}} vim: fdm=marker
+# cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal png; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -
+ 
