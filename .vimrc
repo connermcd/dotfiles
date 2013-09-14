@@ -6,7 +6,6 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-" Bundle 'garbas/vim-snipmate'
 Bundle 'godlygeek/tabular'
 Bundle 'jamessan/vim-gnupg'
 Bundle 'kchmck/vim-coffee-script'
@@ -21,6 +20,7 @@ Bundle 'vim-scripts/FuzzyFinder'
 Bundle 'vim-scripts/L9'
 Bundle 'vim-scripts/tComment'
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'JCLiang/vim-cscope-utils'
 
 filetype plugin indent on
 syntax enable
@@ -34,7 +34,6 @@ set backup
 set backupskip=/tmp/*,/private/tmp/*",*.gpg
 set backupdir=~/.vim/tmp,/tmp
 set browsedir=buffer
-set cursorline
 set directory=~/.vim/tmp,/tmp
 set encoding=utf-8
 set dictionary=~/.vim/spell/eng.utf-8.add
@@ -211,7 +210,6 @@ augroup filetypes " {{{2
    au FileType mail    let mapleader = "\\" | let maplocalleader = "," | setl spell fo=wantq1 smc=0
    au FileType cpp     set makeprg=g++\ \-lpcrecpp\ %\ &&\ ./a.out
    au FileType haskell set nocul cocu=in makeprg=ghc\ %
-   au FileType gitcommit start!
 augroup end
 augroup vimrc " {{{2
    au!
@@ -220,6 +218,14 @@ augroup vimrc " {{{2
    au BufWritePost * sil FufRenewCache
    au BufRead *.session let g:session = getcwd() | so % | bd #
    au VimLeave * if exists("g:session") | call Mks(g:session) | endif
+augroup end
+" Highlight trailing whitespace " {{{2
+highlight ExtraWhitespace guibg=#bd5353 ctermbg=131
+augroup whitespace
+  au!
+  au ColorScheme * highlight ExtraWhitespace guibg=#bd5353 ctermbg=131
+  au BufWinEnter * match ExtraWhitespace /\s\+$\| \+\ze\t/
+  au BufWrite * match ExtraWhitespace /\s\+$\| \+\ze\t/
 augroup end
 " Plugins {{{1
 " Fuzzy Finder {{{2
@@ -256,6 +262,8 @@ let g:tcommentGuessFileType_markdown = 'html'
 " Syntastic {{{2
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_enable_highlighting = 0
+" YouCompleteMe {{{2
+let g:ycm_global_ycm_extra_conf = '/home/connermcd/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()

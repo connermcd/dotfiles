@@ -1,3 +1,8 @@
+hi tab blackbg
+hi status blackbg
+hi current greenfg
+hi id yellowfg
+
 set window playlist
 set autoscroll
 set colour
@@ -23,10 +28,5 @@ map 'g :findgenre!
 map 'b :findalbum! 
 map <BS> f
 map <Space> p
-
-hi tab blackbg
-hi status blackbg
-hi current greenfg
-hi id yellowfg
 
 " vim: ft=vim

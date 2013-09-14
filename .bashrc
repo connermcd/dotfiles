@@ -116,4 +116,3 @@ pathadd $HOME/.gem/ruby/2.0.0/bin
 eval "$(rbenv init -)"
 # }}} vim: fdm=marker
 # cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal png; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -
- 
