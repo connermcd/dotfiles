@@ -6,11 +6,14 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'JCLiang/vim-cscope-utils'
+Bundle 'Valloric/YouCompleteMe'
 Bundle 'godlygeek/tabular'
 Bundle 'jamessan/vim-gnupg'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
+Bundle 'SirVer/ultisnips'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sleuth'
@@ -19,8 +22,6 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/FuzzyFinder'
 Bundle 'vim-scripts/L9'
 Bundle 'vim-scripts/tComment'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'JCLiang/vim-cscope-utils'
 
 filetype plugin indent on
 syntax enable
@@ -41,7 +42,7 @@ set expandtab
 set fileencodings=utf-8
 set fileformats=unix,dos,mac
 set foldmethod=marker
-set formatprg=par
+" set formatprg=par
 set hidden
 set history=1000
 set ignorecase
@@ -264,6 +265,25 @@ let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_enable_highlighting = 0
 " YouCompleteMe {{{2
 let g:ycm_global_ycm_extra_conf = '/home/connermcd/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+" UltiSnips {{{2
+function! g:UltiSnips_Complete()
+call UltiSnips_ExpandSnippet()
+if g:ulti_expand_res == 0
+    if pumvisible()
+        return "\<C-n>"
+    else
+        call UltiSnips_JumpForwards()
+        if g:ulti_jump_forwards_res == 0
+           return "\<TAB>"
+        endif
+    endif
+endif
+return ""
+endfunction
+
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-r><tab>"
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
@@ -363,17 +383,17 @@ endfun
 " Handle URIs {{{2
 nnoremap go :call HandleURI()<cr>
 fun! HandleURI()
-  let l:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*') 
-  if l:uri != "" 
-      if has("win32") 
-          exec "silent !start rundll32.exe url.dll,FileProtocolHandler " . l:uri 
-      else 
-          exec "silent !xdg-open \"" . fnameescape(l:uri) . "\"" 
-      endif 
-      echo "Opened URI: " . l:uri 
+  let l:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*')
+  if l:uri != ""
+      if has("win32")
+          exec "silent !start rundll32.exe url.dll,FileProtocolHandler " . l:uri
+      else
+          exec "silent !xdg-open \"" . fnameescape(l:uri) . "\""
+      endif
+      echo "Opened URI: " . l:uri
   else
-      echo "No URI found in line." 
-  endif 
+      echo "No URI found in line."
+  endif
   redraw!
 endfun
 " PrettyJSON {{{2

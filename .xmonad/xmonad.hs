@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------
 -- Compiler flags --
 {-# LANGUAGE NoMonomorphismRestriction #-}
- 
+
 -- Imports --
 -- stuff
 import XMonad
@@ -12,18 +12,18 @@ import qualified Data.Map as M
 import System.Exit
 import XMonad.Util.Run (safeSpawn)
 import Graphics.X11.ExtraTypes.XF86
- 
+
 -- actions
 import XMonad.Actions.GridSelect
 import XMonad.Actions.CycleWS
- 
+
 -- hooks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.EwmhDesktops
- 
+
 -- layouts
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
@@ -41,7 +41,7 @@ main = xmonad =<< statusBar cmd pp kb conf
     pp = customPP
     kb = toggleStrutsKey
     conf = uhook myConfig
- 
+
 -------------------------------------------------------------------------------
 -- Configs --
 myConfig = defaultConfig { workspaces = workspaces'
@@ -56,7 +56,7 @@ myConfig = defaultConfig { workspaces = workspaces'
                          , manageHook = manageHook'
                          , handleEventHook = fullscreenEventHook
                          }
- 
+
 -------------------------------------------------------------------------------
 -- Window Management --
 manageHook' = composeAll [ isFullscreen             --> doFullFloat
@@ -67,8 +67,8 @@ manageHook' = composeAll [ isFullscreen             --> doFullFloat
                          , insertPosition Below Newer
                          , transience'
                          ]
- 
- 
+
+
 -------------------------------------------------------------------------------
 -- Looks --
 -- bar
@@ -82,15 +82,15 @@ customPP = defaultPP { ppCurrent = xmobarColor "#B8860B" "" . wrap "<" ">"
                      }
 -- GridSelect
 myGSConfig = defaultGSConfig { gs_cellwidth = 160 }
- 
+
 -- urgent notification
 urgentConfig = UrgencyConfig { suppressWhen = Focused, remindWhen = Dont }
- 
+
 -- borders
 borderWidth' = 1
 normalBorderColor'  = "#333333"
 focusedBorderColor' = "#AFAF87"
- 
+
 -- tabs
 tabTheme1 = defaultTheme { decoHeight = 16
                          , activeColor = "#a6c292"
@@ -98,10 +98,10 @@ tabTheme1 = defaultTheme { decoHeight = 16
                          , activeTextColor = "#000000"
                          , inactiveBorderColor = "#000000"
                          }
- 
+
 -- workspaces
 workspaces' = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
- 
+
 -- layouts
 -- layoutHook' = tile ||| mtile ||| tab ||| full
 layoutHook' = tile ||| full
@@ -111,33 +111,33 @@ layoutHook' = tile ||| full
     -- mtile = renamed [Replace "M[]="] $ smartBorders $ Mirror rt
     -- tab = renamed [Replace "T"] $ noBorders $ tabbed shrinkText tabTheme1
     full = renamed [Replace "[]"] $ noBorders Full
- 
+
 -------------------------------------------------------------------------------
 -- Terminal --
 terminal' :: String
 terminal' = "urxvt"
- 
+
 -------------------------------------------------------------------------------
 -- Keys/Button bindings --
 -- modmask
 modMask' = mod4Mask
- 
+
 -- keys
 toggleStrutsKey :: XConfig Layout -> (KeyMask, KeySym)
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask .|. shiftMask, xK_b)
- 
+
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- launching and killing programs
-    [ ((modMask,               xK_Return), safeSpawn terminal' [])
+    [ ((modMask,               xK_Return), safeSpawn terminal' ["-e", "bash", "-c", "tmux attach-session || tmux new-session -s main"])
     , ((modMask,               xK_space ), safeSpawn "dmenu_run" ["-b", "-nb", "black"])
     , ((modMask .|. shiftMask, xK_c     ), kill)
- 
+
     -- multimedia
     , ((0, xF86XK_AudioRaiseVolume      ), safeSpawn "amixer" ["-q", "set", "Master", "1+"])
     , ((0, xF86XK_AudioLowerVolume      ), safeSpawn "amixer" ["-q", "set", "Master", "1-"])
     , ((0, xF86XK_AudioMute             ), safeSpawn "amixer" ["-q", "set", "Master", "toggle"])
- 
+
     -- , ((modMask .|. shiftMask, xK_z     ), safeSpawn "i3lock" ["-c", "000000", "-n"])
     -- grid
     , ((modMask,               xK_g     ), goToSelected myGSConfig)
@@ -145,13 +145,13 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- layouts
     , ((modMask,               xK_f     ), sendMessage NextLayout)
     -- , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
- 
+
     -- floating layer stuff
     , ((modMask .|. shiftMask, xK_f     ), withFocused $ windows . W.sink)
- 
+
     -- refresh
     , ((modMask,               xK_r     ), refresh)
- 
+
     -- focus
     , ((modMask,               xK_Tab   ), windows W.focusDown)
     , ((modMask,               xK_j     ), windows W.focusDown)
@@ -173,17 +173,17 @@ keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_Return), windows W.swapMaster)
     , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  )
     , ((modMask .|. shiftMask, xK_k     ), windows W.swapUp    )
- 
+
     -- increase or decrease number of windows in the master area
     , ((modMask              , xK_comma ), sendMessage (IncMasterN 1))
     , ((modMask              , xK_period), sendMessage (IncMasterN (-1)))
- 
+
     -- resizing
     , ((modMask,               xK_h     ), sendMessage Shrink)
     , ((modMask,               xK_l     ), sendMessage Expand)
     , ((modMask .|. shiftMask, xK_h     ), sendMessage MirrorShrink)
     , ((modMask .|. shiftMask, xK_l     ), sendMessage MirrorExpand)
- 
+
     -- quit, or restart
     , ((modMask .|. shiftMask, xK_q     ), io exitSuccess)
     , ((modMask              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PID=$(cat ~/.offlineimap/pid)
+PID=$(pgrep offlineimap)
 
 if [[ -n $PID ]]; then
    echo "Suspending process..."
