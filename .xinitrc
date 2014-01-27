@@ -37,6 +37,9 @@ eval $(cat ~/.fehbg)
 # offlineimap
 offlineimap -u quiet &
 
+# dropbox
+dropboxd &
+
 # xcompmgr -cfD 5 &
 exec xmonad
 

@@ -13,6 +13,7 @@ set sortignorethe
 set sortignorecase
 set mouse
 set songformat {%a - %b - %t}|{%f}$E$R $H[$H%l$H]$H
+set local-music-dir ~/Music
 " set songformat {%?}|{%f}$E$R $H[$H%l$H]$H
 " set songformat {{%?}|{%?}}|{%f}$E$R $H[$H%l$H]$H
 

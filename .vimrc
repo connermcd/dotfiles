@@ -10,18 +10,20 @@ Bundle 'JCLiang/vim-cscope-utils'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'godlygeek/tabular'
 Bundle 'jamessan/vim-gnupg'
-Bundle 'kchmck/vim-coffee-script'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
-Bundle 'SirVer/ultisnips'
+Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/FuzzyFinder'
 Bundle 'vim-scripts/L9'
-Bundle 'vim-scripts/tComment'
+Bundle 'itchyny/calendar.vim'
+Bundle 'drmingdrmer/xptemplate'
+" Bundle 'kchmck/vim-coffee-script'
+" Bundle 'tpope/vim-rails'
+" Bundle 'vim-ruby/vim-ruby'
+" Bundle 'elixir-lang/vim-elixir'
 
 filetype plugin indent on
 syntax enable
@@ -103,6 +105,7 @@ nnoremap <leader>\ :w<cr>:mak<cr>
 nnoremap <leader>. :cd %:h<cr>
 nnoremap <leader>c :s/.*/\L&/<bar>:s/\<./\u&/g<cr>
 nnoremap <leader>d "_d
+nnoremap <leader>e :Errors<cr>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
 nnoremap <leader>u :w!<cr>:exe "!unotes"<cr>:redraw!<cr>:echo "Notes updated."<cr>
@@ -114,7 +117,7 @@ vnoremap <leader>q <esc>:q!<cr>
 " Pandoc and Notes {{{1
 let g:year = system('echo -n "$YEAR"')
 let g:module = system('echo -n "$MODULE"')
-command! -nargs=1 Nack Ack -i --type *.txt "<args>" $NOTES_DIR/*/*/*.txt
+command! -nargs=1 Nack grep --include=*.txt -r "<args>" "$NOTES_DIR"
 command! -nargs=1 Note exe "e! " . fnameescape($NOTES_DIR . "/MS". g:year . "/mod" . g:module . "/<args>.txt")
 command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
@@ -134,8 +137,8 @@ inoremap <bar>( <esc>d(s
 " Type lang<C-Y> for shebang line
 inoremap <C-Y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype detect<cr>YpDi
 
-nnoremap <C-j> o<esc>
-nnoremap <C-k> O<esc>
+nnoremap <C-j> :pu_<cr>
+nnoremap <C-k> :pu!_<cr>
 
 nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
@@ -167,7 +170,7 @@ cnoremap <C-n> <Down>
 " Autocommands {{{1
 augroup markdown " {{{2
    au!
-   au BufNewFile,BufRead,BufWrite *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown
+   au BufNewFile,BufRead,BufWrite *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown ts=3 sw=3
    au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG/source
    au BufEnter * let &complete=".,w,b,u,t,i"
    au BufRead,BufNewFile,BufEnter   */mod*/*.txt let &complete="k$NOTES_DIR/**/*.txt"
@@ -186,6 +189,8 @@ augroup filetypes " {{{2
    au!
    au BufNewFile,BufRead,BufWrite todo.txt setl ft=todotxt
    au BufNewFile,BufRead,BufWrite *.csv setl ft=csv
+   au BufNewFile,BufRead,BufWrite *.ejs setl ft=html
+   au FileType calendar hi ExtraWhitespace NONE
    au FileType coffee  nnoremap <leader><leader> :CoffeeRun<cr>
    au FileType ruby    setl sw=2 makeprg=ruby\ % efm=
       \%+E%f:%l:\ parse\ error,
@@ -215,6 +220,7 @@ augroup end
 augroup vimrc " {{{2
    au!
    au BufRead todo.txt setl ft=todotxt
+   au BufWrite * sil !mkdir -p %:h
    au BufWritePost $MYVIMRC sil so $MYVIMRC
    au BufWritePost * sil FufRenewCache
    au BufRead *.session let g:session = getcwd() | so % | bd #
@@ -266,24 +272,29 @@ let g:syntastic_enable_highlighting = 0
 " YouCompleteMe {{{2
 let g:ycm_global_ycm_extra_conf = '/home/connermcd/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " UltiSnips {{{2
-function! g:UltiSnips_Complete()
-call UltiSnips_ExpandSnippet()
-if g:ulti_expand_res == 0
-    if pumvisible()
-        return "\<C-n>"
-    else
-        call UltiSnips_JumpForwards()
-        if g:ulti_jump_forwards_res == 0
-           return "\<TAB>"
-        endif
-    endif
-endif
-return ""
-endfunction
-
-au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-r><tab>"
+" function! g:UltiSnips_Complete()
+" call UltiSnips_ExpandSnippet()
+" if g:ulti_expand_res == 0
+"     if pumvisible()
+"         return "\<C-n>"
+"     else
+"         call UltiSnips_JumpForwards()
+"         if g:ulti_jump_forwards_res == 0
+"            return "\<TAB>"
+"         endif
+"     endif
+" endif
+" return ""
+" endfunction
+"
+" au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsListSnippets="<c-r><tab>"
+" calendar.vim {{{2
+let g:calendar_google_calendar = 1
+let g:calendar_clock_12hour = 1
+" xptemplate {{{2
+let g:xptemplate_brace_complete = '{'
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
@@ -437,10 +448,10 @@ map! <C-v>ps ψ
 map! <C-v>om ω
 map! <C-v>ph ϕ
 " Math {{{1
-map! <C-v>> →
-map! <C-v>< ⇌
-map! <C-v>n ↑
-map! <C-v>v ↓
+map! <C-v>ll →
+map! <C-v>hh ⇌
+map! <C-v>kk ↑
+map! <C-v>jj ↓
 map! <C-v>= ∝
 map! <C-v>~ ≈
 map! <C-v>!= ≠
@@ -469,17 +480,17 @@ inoremap <leader>-- ^-^
 inoremap <leader>-2 ^2-^
 inoremap <leader>-3 ^3-^
 " Extended Text Objects {{{1
-" let items = [ "<bar>", "\\", "/", ":", ".", "*", "_" ]
-" for item in items
-"   exe "nnoremap yi".item." T".item."yt".item
-"   exe "nnoremap ya".item." F".item."yf".item
-"   exe "nnoremap ci".item." T".item."ct".item
-"   exe "nnoremap ca".item." F".item."cf".item
-"   exe "nnoremap di".item." T".item."dt".item
-"   exe "nnoremap da".item." F".item."df".item
-"   exe "nnoremap vi".item." T".item."vt".item
-"   exe "nnoremap va".item." F".item."vf".item
-" endfor
-" nnoremap viz v[zo]z$
+let items = [ "<bar>", "\\", "/", ":", ".", "*", "_" ]
+for item in items
+  exe "nnoremap yi".item." T".item."yt".item
+  exe "nnoremap ya".item." F".item."yf".item
+  exe "nnoremap ci".item." T".item."ct".item
+  exe "nnoremap ca".item." F".item."cf".item
+  exe "nnoremap di".item." T".item."dt".item
+  exe "nnoremap da".item." F".item."df".item
+  exe "nnoremap vi".item." T".item."vt".item
+  exe "nnoremap va".item." F".item."vf".item
+endfor
+nnoremap viz v[zo]z$
 
 " }}} vim: fdm=marker

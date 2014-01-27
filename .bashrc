@@ -6,7 +6,7 @@ export PROMPT_COMMAND=__prompt_command
 
 __prompt_command() {
    code=$?
-   [[ $code != 0 ]] && echo -e "$RED✗ $code"
+   [[ $code != 0 ]] && echo -e "$RED✗ ${code}${RESET_COLOR}"
    PS1="$(ps1_hostname)\[\e[1;36m\]\W\[\e[1;31m\]:\[\e[0m\] "
 }
 
@@ -19,17 +19,19 @@ ps1_hostname() {
 
 bind TAB:menu-complete
 # Env {{{1
+export BLOG="$HOME/Dropbox/Tech/src/rb/blog"
 export BROWSER=/usr/bin/chromium
 export EDITOR=vim
 export HISTSIZE=1000
-export BLOG=$HOME/Dropbox/Tech/projects/ruby/blog
+export PASSWORD_FILE="$HOME/Dropbox/Archive/Important/passwords"
+
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
 # Notes {{{2
 export YEAR=2
 export MODULE=9
-export NOTES_DIR=$HOME/Dropbox/Courses/Notes
+export NOTES_DIR=$HOME/Dropbox/Archive/Med\ School/Notes
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -40,33 +42,35 @@ export LESS_TERMCAP_ue=$'\e[0m'     # end underline
 export LESS_TERMCAP_us=$'\e[01;36m' # begin underline
 # Aliases {{{1
 # abbrevs
-alias em="mutt"
-alias htop="sudo htop"
+alias v="vim"
 alias i="irssi"
-alias linode="ssh connermcd@linode"
 alias m="vimpc"
+alias em="mutt"
+alias r="ranger"
+alias htop="sudo htop"
+alias linode="ssh connermcd@linode"
 alias monitor="sudo monitor"
 alias nstech="ssh connermcd@nstech"
 alias open="xdg-open"
 alias pi="ssh connermcd@pi"
 alias py="python"
 alias py2="python2"
-alias r="rails"
-alias trans="transmission-cli"
-alias wifi="sudo wifi-menu"
+alias tran="transmission-remote-cli"
 # flags
+alias aa="/home/connermcd/.tintin/tmuxit"
 alias bd="cd $BLOG && bundle exec rake generate && bundle exec rake rsync && cd -"
 alias calc="libreoffice --calc"
 alias cleanvim="vim -N -u NONE"
 alias draw="libreoffice --draw"
 alias duh="du -h -d 0 [^.]*"
 alias impress="libreoffice --impress"
+alias inotify="echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p"
 alias l="ls -al"
 alias ls='ls --color=auto'
-alias mplayer-hdmi="mplayer -ao alsa:noblock:device=hw=0,3"
 alias myip="curl http://myip.dnsomatic.com && echo ''"
 alias pandoc="pandoc --latex-engine=lualatex"
 alias pretty-json="python2 -mjson.tool"
+alias print="lpr -P 'Deskjet_F4500_USB'"
 alias screencast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-sys-out="ffmpeg -f alsa -ac 2 -i hw:0,1 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
@@ -75,6 +79,7 @@ alias unneeded="sudo pacman -Rsn \$(pacman -Qqdt)"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias wifi="wicd-cli -y"
+alias lswifi="wicd-cli -yx && wicd-cli -yS && wicd-cli -yl"
 alias writer="libreoffice --writer"
 # Functions {{{1
 speedup() {
@@ -100,6 +105,9 @@ pacsize() {
       awk 'BEGIN{sort="sort -k2 -n"} /Name/ {name=$3} /Size/ {size=$4/1024;print name":",size,"Mb"|sort}' | \
       less
 }
+pget() {
+   pirate-get -t "$*"
+}
 ptime() {
    find -type f -name \"*\" -print0 | \
       xargs -0  mplayer -vo dummy -ao dummy -identify 2>/dev/null | \
@@ -121,4 +129,5 @@ pathadd $HOME/.rbenv/bin
 pathadd $HOME/.gem/ruby/2.0.0/bin
 eval "$(rbenv init -)"
 # }}} vim: fdm=marker
+# Gnuplot {{{1
 # cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal x11; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -

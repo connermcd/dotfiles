@@ -129,7 +129,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask .|. shiftMask, xK_
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- launching and killing programs
-    [ ((modMask,               xK_Return), safeSpawn terminal' ["-e", "bash", "-c", "tmux attach-session || tmux new-session -s main"])
+    [ ((modMask,               xK_Return), safeSpawn terminal' ["-e", "bash", "-c", "tmux attach-session -d || tmux new-session -s main"])
     , ((modMask,               xK_space ), safeSpawn "dmenu_run" ["-b", "-nb", "black"])
     , ((modMask .|. shiftMask, xK_c     ), kill)
 
