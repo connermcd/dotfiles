@@ -128,35 +128,24 @@ nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex 
 nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
 nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
-inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
-inoremap <C-l> <space>=><space>
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 inoremap <bar>( <esc>d(s
 
 " Type lang<C-Y> for shebang line
-inoremap <C-Y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype detect<cr>YpDi
+inoremap <C-y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype detect<cr>YpDi
+" Type 1. something<C-j> for 2.
+inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
 
-nnoremap <C-j> :pu_<cr>
-nnoremap <C-k> :pu!_<cr>
+" Use :norm! so a count can be accepted
+nnoremap <C-j> :norm! o<esc>k<cr>
+nnoremap <C-k> :norm! O<esc>j<cr>
 
 nnoremap <C-n> :cn<cr>z.
 nnoremap <C-p> :cp<cr>z.
 nnoremap Q :exe "try <bar> tabc! <bar> catch /E784/ <bar> qa! <bar> endtry"<cr>
-vnoremap K k
-vnoremap & :s<cr>
 
 nnoremap <leader>r :nnoremap <leader>r :!
-
-nnoremap g<C-n> gt
-nnoremap g<C-p> gT
-nnoremap zp Gzt13<C-y>G$
-
-command! W w !sudo tee % &>/dev/null
-command! Mks let g:session = getcwd() <bar> call Mks(g:session)
-
-" Pull last visually selected area onto command-line mode
-cnoremap <C-R><C-V> <C-R>=fnameescape(getline("'<")[ getpos("'<")[2]-1 : getpos("'>")[2]-1 ])<CR>
 
 " Steve Losh
 noremap H ^
@@ -164,18 +153,26 @@ noremap L g_
 noremap! <C-a> <Home>
 noremap! <C-e> <End>
 
+vnoremap K k
+vnoremap & :s<cr>
+
+command! W w !sudo tee % &>/dev/null
+command! Mks let g:session = getcwd() <bar> call Mks(g:session)
+
+" Pull last visually selected area onto command-line mode
+cnoremap <C-R><C-V> <C-R>=fnameescape(getline("'<")[ getpos("'<")[2]-1 : getpos("'>")[2]-1 ])<CR>
+
 " Drew Neil
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 " Autocommands {{{1
 augroup markdown " {{{2
    au!
-   au BufNewFile,BufRead,BufWrite *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown ts=3 sw=3
-   au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG/source
    au BufEnter * let &complete=".,w,b,u,t,i"
-   au BufRead,BufNewFile,BufEnter   */mod*/*.txt let &complete="k$NOTES_DIR/**/*.txt"
-   au BufRead,BufNewFile,BufEnter   */mod*/*.txt lcd %:h
-   au BufRead,BufWrite,InsertChange */mod*/*.txt syn match ErrorMsg '\%>77v.\+'
+   au BufNewFile,BufRead,BufWrite   *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown ts=3 sw=3
+   au BufNewFile,BufRead,BufWrite   *.txt,*.md,*.mkd,*.markdown,*.mdwn let &complete="k".expand("%:p:h")."/*.md"
+   au BufRead,BufWrite,InsertChange *.txt,*.md,*.mkd,*.markdown,*.mdwn syn match ErrorMsg '\%>77v.\+'
+   au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG/source
 augroup end
 augroup nonvim " {{{2
    au!
@@ -249,7 +246,7 @@ nnoremap 'j  :FufFile $HOME/.vim/<cr>
 nnoremap 'k  :FufBuffer<cr>
 nnoremap 'l  :FufTag<cr>
 nnoremap 'n  :FufFile $HOME/Dropbox/Notes/mod<c-r>=g:module<cr>/<cr>
-nnoremap 'p  :e! $HOME/Dropbox/Archive/Important/passwords.gpg<cr>
+nnoremap 'p  :e! ${PASSWORD_FILE}.gpg<cr>
 nnoremap 'r  :e! $HOME/.bashrc<cr><cr>
 nnoremap 's  :FufFile spec/<cr>
 nnoremap 't  :cd %:p:h<cr>:sh<cr>:cd -<cr>
@@ -270,7 +267,7 @@ let g:tcommentGuessFileType_markdown = 'html'
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_enable_highlighting = 0
 " YouCompleteMe {{{2
-let g:ycm_global_ycm_extra_conf = '/home/connermcd/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '$HOME/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " UltiSnips {{{2
 " function! g:UltiSnips_Complete()
 " call UltiSnips_ExpandSnippet()
@@ -293,8 +290,6 @@ let g:ycm_global_ycm_extra_conf = '/home/connermcd/.vim/bundle/YouCompleteMe/cpp
 " calendar.vim {{{2
 let g:calendar_google_calendar = 1
 let g:calendar_clock_12hour = 1
-" xptemplate {{{2
-let g:xptemplate_brace_complete = '{'
 " Functions {{{1
 " HTML Paste {{{2
 command! -range=% HtmlPaste <line1>,<line2>call HtmlPaste()
