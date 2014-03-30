@@ -28,7 +28,7 @@ map 'a :findartist!
 map 'g :findgenre! 
 map 'b :findalbum! 
 map <BS> f
-map <Space> p
+" map <Space> p
 map = +
 
 " vim: ft=vim

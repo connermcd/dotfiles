@@ -108,21 +108,16 @@ nnoremap <leader>d "_d
 nnoremap <leader>e :Errors<cr>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
-nnoremap <leader>u :w!<cr>:exe "!unotes"<cr>:redraw!<cr>:echo "Notes updated."<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>x :sign unplace *<cr>
 nnoremap <leader>z :wq!<cr>
 vnoremap <leader>d "_d
 vnoremap <leader>q <esc>:q!<cr>
 " Pandoc and Notes {{{1
-let g:year = system('echo -n "$YEAR"')
-let g:module = system('echo -n "$MODULE"')
-command! -nargs=1 Nack grep --include=*.txt -r "<args>" "$NOTES_DIR"
-command! -nargs=1 Note exe "e! " . fnameescape($NOTES_DIR . "/MS". g:year . "/mod" . g:module . "/<args>.txt")
-command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
+command! -nargs=1 Ngrep vimgrep "<args>" $NOTES_DIR/**/*.txt
+nnoremap <leader>[ :Ngrep 
 
-nnoremap <leader>[ :Nack 
-nnoremap <leader>] :Note 
+command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
 nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
 nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
@@ -238,14 +233,13 @@ nnoremap '.  :FufFileWithCurrentBufferDir<cr>
 nnoremap ''  :b#<cr>
 nnoremap '/  :FufFile /<cr>
 nnoremap 'a  :FufFile app/<cr>
-nnoremap 'c  :FufFile $HOME/Dropbox/Courses/Module <c-r>=g:module<cr>/<cr>
 nnoremap 'd  :FufFile $HOME/Dropbox/<cr>
 nnoremap 'f  :FufFile<cr>
 nnoremap 'h  :FufFile $HOME/<cr>
 nnoremap 'j  :FufFile $HOME/.vim/<cr>
 nnoremap 'k  :FufBuffer<cr>
 nnoremap 'l  :FufTag<cr>
-nnoremap 'n  :FufFile $HOME/Dropbox/Notes/mod<c-r>=g:module<cr>/<cr>
+nnoremap 'n  :FufFile $NOTES_DIR/<cr>
 nnoremap 'p  :e! ${PASSWORD_FILE}.gpg<cr>
 nnoremap 'r  :e! $HOME/.bashrc<cr><cr>
 nnoremap 's  :FufFile spec/<cr>

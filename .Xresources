@@ -8,13 +8,15 @@ URxvt*background      : #000000
 URxvt*shading         : 30
 URxvt*fading          : 10%
 URxvt*internalBorder  : 5
-URxvt*scrollBar       : False
+URxvt*scrollBar       : false
 URxvt*pointerBlank    : true
 URxvt*font            : xft:Inconsolata:size=12,xft:Monospace
 URxvt*perl-ext-common : default,matcher
 URxvt*urlLauncher     : /usr/bin/chromium
 URxvt*matcher.button  : 1
 URxvt*termName        : rxvt-unicode-256color
+URxvt*iso14755        : false
+URxvt*iso14755_52     : false
 
 !black
 *color0 :            #222222

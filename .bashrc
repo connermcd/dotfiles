@@ -19,19 +19,22 @@ ps1_hostname() {
 
 bind TAB:menu-complete
 # Env {{{1
+export RED='\033[0;31m'
+export YELLOW='\033[1;33m'
+export GREEN='\033[0;32m'
+export RESET_COLOR='\033[0m'
+
 export BLOG="$HOME/Dropbox/Tech/src/rb/blog"
 export BROWSER=/usr/bin/chromium
 export EDITOR=vim
 export HISTSIZE=10000
 export PASSWORD_FILE="$HOME/Dropbox/Archive/Important/passwords"
-
-export RED='\033[0;31m'
-export GREEN='\033[0;32m'
-export RESET_COLOR='\033[0m'
+export TIMEFORMAT="=> %E"
+export ANDROID_HOME="/opt/android-sdks"
 # Notes {{{2
 export YEAR=2
 export MODULE=9
-export NOTES_DIR=$HOME/Dropbox/Archive/Med\ School/Notes
+export NOTES_DIR="$HOME/Dropbox/Archive/School/Med School/Notes"
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -48,7 +51,6 @@ alias cleanvim="vim -N -u NONE"
 alias draw="libreoffice --draw"
 alias duh="du -h -d 0 [^.]*"
 alias em="mutt"
-alias gtd="gtd -mnt"
 alias htop="sudo htop"
 alias i="irssi"
 alias impress="libreoffice --impress"
@@ -82,6 +84,14 @@ alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 6
 alias wifi="wicd-curses"
 alias writer="libreoffice --writer"
 # Functions {{{1
+gong() {
+   at "$1" today <<EOF
+notify-send "Time to go"
+mpc -q toggle
+mplayer /usr/lib/libreoffice/share/gallery/sounds/gong.wav
+EOF
+
+}
 pacsize() {
    sudo pacman -Qi | \
       awk 'BEGIN{sort="sort -k2 -n"} /Name/ {name=$3} /Size/ {size=$4/1024;print name":",size,"Mb"|sort}' | \
@@ -128,9 +138,10 @@ fi
 }
 pathadd $HOME/.bin
 pathadd $HOME/.cabal/bin
-pathadd $HOME/.rbenv/bin
-pathadd $HOME/.gem/ruby/2.0.0/bin
-eval "$(rbenv init -)"
+pathadd $HOME/.gem/ruby/2.1.0/bin
+pathadd $ANDROID_HOME/tools
+pathadd $ANDROID_HOME/platform-tools
+pathadd $ANDROID_HOME/build-tools/19.0.2
 # }}} vim: fdm=marker
 # Gnuplot {{{1
 # cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal x11; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -
