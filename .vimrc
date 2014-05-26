@@ -8,9 +8,11 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'JCLiang/vim-cscope-utils'
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'benmills/vimux'
+Bundle 'drmingdrmer/xptemplate'
 Bundle 'godlygeek/tabular'
+Bundle 'itchyny/calendar.vim'
 Bundle 'jamessan/vim-gnupg'
-Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
@@ -18,8 +20,6 @@ Bundle 'tpope/vim-sleuth'
 Bundle 'tpope/vim-surround'
 Bundle 'vim-scripts/FuzzyFinder'
 Bundle 'vim-scripts/L9'
-Bundle 'itchyny/calendar.vim'
-Bundle 'drmingdrmer/xptemplate'
 " Bundle 'kchmck/vim-coffee-script'
 " Bundle 'tpope/vim-rails'
 " Bundle 'vim-ruby/vim-ruby'
@@ -248,6 +248,8 @@ nnoremap 'v  :e! $MYVIMRC<cr><cr>
 nnoremap 'w  :FufFile $HOME/Dropbox/Tech/web/<cr>
 nnoremap 'y  :FufFile $HOME/Dropbox/Archive/Bible/<cr>
 let g:fuf_file_exclude = '\v\~$|\.(DS_Store|o|exe|dll|bak|orig|swp)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])'
+" xptemplate {{{2
+let g:xptemplate_debug_log = '~/.xpt.log'
 " Surround.vim {{{2
 let g:surround_42 = "**\r**"
 nnoremap ** :exe "norm v$hS*"<cr>
