@@ -8,7 +8,7 @@ fi
 # starts wireless manager
 wicd-client -t &
 
-# sets pointer so it's not just an X
+# sets pointer so that it's not just an X
 xsetroot -cursor_name left_ptr
 
 # reads X configuration
