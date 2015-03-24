@@ -12,7 +12,7 @@ set ignorecase
 set sortignorethe
 set sortignorecase
 set mouse
-set songformat {%a - %b - %t}|{%f}$E$R $H[$H%l$H]$H
+set songformat {%a - %b - %t}|{%f}$E$R [%l]
 set local-music-dir ~/Music
 " set songformat {%?}|{%f}$E$R $H[$H%l$H]$H
 " set songformat {{%?}|{%?}}|{%f}$E$R $H[$H%l$H]$H
@@ -22,13 +22,15 @@ map Q ZQ
 map <C-N> gt
 map <C-P> gT
 map gs :shuffle<C-M>
-map ga :!mpc listall | mpc add<C-M>:shuffle<C-M>
+map ga :addall<C-M>:shuffle<C-M>
 map gl :load 
-map 'a :findartist! 
-map 'g :findgenre! 
-map 'b :findalbum! 
+" map 'a :findartist! 
+" map 'g :findgenre! 
+" map 'b :findalbum! 
 map <BS> f
 " map <Space> p
 map = +
+
+map tt :test-console<C-M>:test window<C-M>
 
 " vim: ft=vim

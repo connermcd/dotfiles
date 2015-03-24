@@ -23,6 +23,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ICCCMFocus
 
 -- layouts
 import XMonad.Layout.NoBorders
@@ -55,6 +56,7 @@ myConfig = defaultConfig { workspaces = workspaces'
                          , layoutHook = layoutHook'
                          , manageHook = manageHook'
                          , handleEventHook = fullscreenEventHook
+                         , logHook = takeTopFocus
                          }
 
 -------------------------------------------------------------------------------

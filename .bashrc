@@ -24,7 +24,7 @@ export YELLOW='\033[1;33m'
 export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
 
-export BLOG="$HOME/Dropbox/Tech/src/rb/blog"
+export BLOG="$HOME/Dropbox/Tech/src/rb/connermcd.github.io"
 export BROWSER=/usr/bin/chromium
 export EDITOR=vim
 export HISTSIZE=10000
@@ -45,7 +45,6 @@ export LESS_TERMCAP_ue=$'\e[0m'     # end underline
 export LESS_TERMCAP_us=$'\e[01;36m' # begin underline
 # Aliases {{{1
 alias aa="/home/connermcd/.tintin/tmuxit"
-alias bd="cd $BLOG && bundle exec rake generate && bundle exec rake rsync && cd -"
 alias calc="libreoffice --calc"
 alias cleanvim="vim -N -u NONE"
 alias cp="rsync --archive --human-readable --progress --verbose --whole-file"
@@ -53,6 +52,10 @@ alias scp="rsync --archive --checksum --compress --human-readable --itemize-chan
 alias draw="libreoffice --draw"
 alias duh="du -h -d 0 [^.]*"
 alias em="mutt"
+alias draw="libreoffice --draw"
+alias duh="du -h -d 0 [^.]*"
+alias em="mutt"
+alias grep="grep --color"
 alias htop="sudo htop"
 alias i="irssi"
 alias impress="libreoffice --impress"
@@ -75,17 +78,24 @@ alias r="ranger"
 alias screencast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
 alias screencast-sys-out="ffmpeg -f alsa -ac 2 -i hw:0,1 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
+alias slideshow="pandoc -t beamer -V theme:Boadilla -V colortheme:beaver -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 alias t="/home/connermcd/Dropbox/Tech/todo/todo.sh"
 alias tran="transmission-remote-cli"
 alias unneeded="sudo pacman -Rsn \$(pacman -Qqdt)"
-alias v="vim"
 alias vb="VBoxManage"
+alias vim="vim --servername a"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias wifi="wicd-curses"
 alias writer="libreoffice --writer"
 # Functions {{{1
+compress-pdf() {
+   gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH "$1"
+}
+repair-pdf() {
+   gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress "$1"
+}
 gong() {
    at "$1" today <<EOF
 notify-send "Time to go"
@@ -98,9 +108,6 @@ pacsize() {
    sudo pacman -Qi | \
       awk 'BEGIN{sort="sort -k2 -n"} /Name/ {name=$3} /Size/ {size=$4/1024;print name":",size,"Mb"|sort}' | \
       less
-}
-pget() {
-   pirate-get -t "$*"
 }
 poke() {
 cat <<EOF | nc "$1" "$2"
@@ -122,9 +129,6 @@ recent() {
 speedup() {
    </dev/null ffmpeg -i "$*" -filter atempo=1.5 "${*%%.mp3}-150.mp3"
 }
-textfiles() {
-   file ${*:-*} | grep -E "text$" | sed 's/:.*//'
-}
 webrick() {
    port="${1:-3000}"
    ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => $port, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"
@@ -132,6 +136,7 @@ webrick() {
 youtube() {
    mplayer -fs -cookies -cookies-file cookie.txt $(youtube-dl -g --cookies cookie.txt -f 18 "http://www.youtube.com/watch?v=$1")
 }
+syt() { pipe=`mktemp -u`; mkfifo -m 600 "$pipe" && for i in "$@"; do youtube-dl -qo "$pipe" "$i" & mplayer "$pipe" || break; done; rm -f "$pipe"; }
 # Path {{{1
 pathadd() {
 if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
@@ -141,9 +146,6 @@ fi
 pathadd $HOME/.bin
 pathadd $HOME/.cabal/bin
 pathadd $HOME/.gem/ruby/2.1.0/bin
-pathadd $ANDROID_HOME/tools
-pathadd $ANDROID_HOME/platform-tools
-pathadd $ANDROID_HOME/build-tools/19.0.2
 # }}} vim: fdm=marker
 # Gnuplot {{{1
 # cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal x11; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -
