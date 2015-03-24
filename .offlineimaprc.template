@@ -1,0 +1,28 @@
+[general]
+# NOTE: cronjob calls the quiet UI with -u
+ui = basic
+accounts = Gmail
+
+[Account Gmail]
+localrepository = Gmail-Local
+remoterepository = Gmail-Remote
+autorefresh = 5
+quick = 10
+postsynchook = mu index --maildir ~/.mail
+status_backend = sqlite
+
+[Repository Gmail-Local]
+type = Maildir
+localfolders = ~/.mail
+
+[Repository Gmail-Remote]
+type = Gmail
+remoteuser = <email>
+remotepass = <password>
+idlefolders = ['INBOX']
+keepalive = 60
+holdconnectionopen = yes
+realdelete = yes
+
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+# vim: ft=cfg tw=0
