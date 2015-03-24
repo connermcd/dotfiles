@@ -16,9 +16,11 @@ set mail_check          = 0
 set sort_alias          = alias
 set reverse_alias       = yes
 
-mailboxes +INBOX
+mailboxes +INBOX +UTHSCSA
 alternative_order text/plain text/enriched text/html
 auto_view text/html
+
+set print_command="muttdoc | pandoc --template=email.tex -V fullpage --latex-engine=xelatex --listings -o ~/email.pdf"
 
 ignore *
 unignore from: subject to cc date x-mailer x-url user-agent

@@ -43,6 +43,8 @@ bind index,pager p previous-undeleted
 bind index,pager N next-unread
 bind index,pager P previous-unread
 
+bind index,pager X print-message
+
 macro index Z "<shell-escape>mu find --clearlinks --format=links --linksdir=~/.mu/results " "mu find"
 macro index S "<change-folder-readonly>~/.mu/results<enter>" "mu find results"
 
