@@ -12,8 +12,9 @@ __prompt_command() {
 
 ps1_hostname() {
    host=$(hostname)
-   if [[ "$host" != "connermcd-laptop" ]]; then
-      echo "\[\e[0;37m\]@\[\e[1;30m\]$host "
+   user=$(whoami)
+   if [[ "$host" != "lemur" || "$user" != "connermcd" ]]; then
+      echo "\[\e[1;30m\]$user\[\e[0;37m\]@\[\e[1;36m\]$host "
    fi
 }
 
@@ -60,13 +61,10 @@ alias ls='ls --color=auto'
 alias m="vimpc"
 alias myip="curl http://myip.dnsomatic.com && echo ''"
 alias open="xdg-open"
-alias pandoc="pandoc --latex-engine=lualatex -H $HOME/.texlive/fonts.tex"
+alias pandoc="pandoc --latex-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
 alias pretty-json="python2 -mjson.tool"
 alias print="lpr -P 'Deskjet_F4500'"
-alias r="ranger"
-alias screencast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
-alias screencast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
-alias screencast-sys-out="ffmpeg -f alsa -ac 2 -i hw:0,1 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y output.mkv"
+alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
 alias slideshow="pandoc -t beamer -V theme:Boadilla -V colortheme:beaver -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 alias t="/home/connermcd/Dropbox/Tech/todo/todo.sh"
@@ -75,13 +73,37 @@ alias unneeded="sudo pacman -Rsn \$(pacman -Qqdt)"
 alias usermount="sudo mount -o gid=users,fmask=113,dmask=002"
 alias vb="VBoxManage"
 alias vim="vim --servername a"
+alias webcam="mplayer -noborder -tv driver=v4l2:gain=1:width=320:height=240:device=/dev/video0:fps=10:outfmt=rgb16 -geometry 100%:97% tv://"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
-alias wifi="wicd-curses"
+alias wifi="sudo wifi-menu -o"
 alias writer="libreoffice --writer"
 # Functions {{{1
 compress-pdf() {
    gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH "$1"
+}
+cut-video() {
+   ffmpeg -i "$1" -ss "$2" -to "$3" -c copy cut.mp4
+}
+concat-video() {
+   ffmpeg -i "$1" -c copy -bsf:v h264_mp4toannexb -f mpegts intermediate1.ts
+   ffmpeg -i "$2" -c copy -bsf:v h264_mp4toannexb -f mpegts intermediate2.ts
+   ffmpeg -i "concat:intermediate1.ts|intermediate2.ts" -c copy -bsf:a aac_adtstoasc concat.mp4 && rm intermediate1.ts intermediate2.ts
+}
+doigrep() {
+    [ $# -ge 1 -a -f "$1" ] && input="$1" || input="-"
+    grep -oP "\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b" "$input"
+}
+doi2bib() {
+   echo >> bib.bib
+   curl -s "http://api.crossref.org/works/$1/transform/application/x-bibtex" >>bib.bib
+   echo >> bib.bib
+}
+pmid2bib() {
+   curl -s "https://www.ncbi.nlm.nih.gov/pubmed/$1?report=xml&format=raw" | sed -e 's/&gt;/>/g' -e 's/&lt;/</g' | med2xml | xml2bib -nb -b >>bib.bib
+}
+pdf2bib() {
+    pdftotext "$1" - | doigrep | while read doi; do doi2bib "$doi"; done
 }
 repair-pdf() {
    gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress "$1"
@@ -113,11 +135,32 @@ ptime() {
       perl -nle '/ID_LENGTH=([0-9\.]+)/ && (\$t +=\$1) && printf \"%02d:%02d:%02d\n\",\$t/3600,\$t/60%60,\$t%60' | \
       tail -n 1
 }
+r() {
+   [[ "$RANGER_LEVEL" ]] && exit || ranger
+}
 recent() {
    find $HOME/Dropbox/ -type f -regex ".*\.\(md\|txt\)" -mtime -$1 -not -path "*dropbox*" -exec vim "{}" +
 }
 speedup() {
    </dev/null ffmpeg -i "$*" -filter atempo=1.5 "${*%%.mp3}-150.mp3"
+}
+twitch() {
+   INRES="1920x1080" # input resolution
+   OUTRES="1280x720" # output resolution
+   FPS="30" # target FPS
+   GOP="60" # i-frame interval, should be double of FPS
+   GOPMIN="30" # min i-frame interval, should be equal to fps
+   THREADS="4" # max 6
+   CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
+   QUALITY="ultrafast"  # one of the many FFMPEG preset
+   AUDIO_RATE="44100"
+   STREAM_KEY=$(pass show twitchkey) # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
+   SERVER="live-dfw" # twitch server in frankfurt, see http://bashtech.net/twitch/ingest.php for list
+
+   ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0.0 -f alsa -i hw:2,0 -f flv -ac 2 -ar $AUDIO_RATE \
+      -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b:v $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p\
+      -s $OUTRES -preset $QUALITY -acodec libmp3lame -threads $THREADS -strict normal \
+      -bufsize $CBR "rtmp://$SERVER.twitch.tv/app/$STREAM_KEY"
 }
 webrick() {
    port="${1:-3000}"
@@ -127,15 +170,5 @@ youtube() {
    mplayer -fs -cookies -cookies-file cookie.txt $(youtube-dl -g --cookies cookie.txt -f 18 "http://www.youtube.com/watch?v=$1")
 }
 syt() { pipe=`mktemp -u`; mkfifo -m 600 "$pipe" && for i in "$@"; do youtube-dl -qo "$pipe" "$i" & mplayer "$pipe" || break; done; rm -f "$pipe"; }
-# Path {{{1
-pathadd() {
-if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-    PATH="${PATH:+"$PATH:"}$1"
-fi
-}
-pathadd $HOME/.bin
-pathadd $HOME/.cabal/bin
-pathadd $HOME/.gem/ruby/2.1.0/bin
-# }}} vim: fdm=marker
 # Gnuplot {{{1
 # cat ~/.bash_history | awk '/^git/ { print $1, $2 }' | sort | uniq -dc | sort | gnuplot -p -e 'set terminal x11; set xtics rotate 180; set key off; plot [:][:] "< cat -" using 1: xtic(3) with histogram' | feh -

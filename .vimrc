@@ -20,8 +20,12 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sleuth'
 Plugin 'tpope/vim-surround'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'vim-scripts/L9'
+Plugin 'lumiliet/vim-twig'
+Plugin 'dhruvasagar/vim-table-mode'
 
 filetype plugin indent on
 syntax enable
@@ -115,9 +119,10 @@ nnoremap <leader>[ :Ngrep
 
 command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
 
-nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
-nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
-nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.cabal/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
+nnoremap 'ms :w!<cr>:exe "!pandoc -t beamer -V theme:boxes -V colortheme:beaver -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'mh :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.config/pandoc/fonts.tex -o " . fnameescape(expand('%:p:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'md :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.config/pandoc/fonts.tex -o $HOME/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p'))<cr>
+nnoremap 'mp :w!<cr>:exe "!pandoc --latex-engine=lualatex -H ~/.config/pandoc/fonts.tex -o /tmp/" . fnameescape(expand('%:t:r')) . ".pdf " . fnameescape(expand('%:p')) . " && xdg-open /tmp/" . fnameescape(expand('%:t:r')) . ".pdf"<cr>
 " Misc {{{1
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
@@ -158,9 +163,9 @@ cnoremap <C-n> <Down>
 augroup markdown " {{{2
     au!
     au BufEnter * let &complete=".,w,b,u,t,i"
-    au BufNewFile,BufRead,BufWrite   *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=markdown ts=3 sw=3
-    au BufNewFile,BufRead,BufWrite   *.txt,*.md,*.mkd,*.markdown,*.mdwn let &complete="k".expand("%:p:h")."/*.md"
-    au BufRead,BufWrite,InsertChange *.txt,*.md,*.mkd,*.markdown,*.mdwn syn match ErrorMsg '\%>77v.\+'
+    au BufNewFile,BufRead   *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=pandoc ts=3 sw=3
+    au BufNewFile,BufRead   *.txt,*.md,*.mkd,*.markdown,*.mdwn let &complete="k".expand("%:p:h")."/*.md"
+    " au BufRead,BufWrite,InsertChange *.txt,*.md,*.mkd,*.markdown,*.mdwn syn match ErrorMsg '\%>77v.\+'
     au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG
 augroup end
 augroup nonvim " {{{2
@@ -170,6 +175,7 @@ augroup nonvim " {{{2
     au BufRead *.ppt*,*.doc*,*.rtf let g:output_pdf = shellescape(expand("%:r") . ".pdf")
     au BufRead *.ppt*,*.doc*,*.rtf sil exe "!$HOME/.bin/pdf " . shellescape(expand("%:p"))
     au BufRead *.ppt*,*.doc*,*.rtf sil exe "!xdg-open " . g:output_pdf | bd | let &ft=&ft | redraw!
+    au BufRead *.pdf sil exe "!zathura " . expand("%:p") | bd | let &ft=&ft | redraw!
 augroup end
 augroup filetypes " {{{2
     au!
@@ -201,6 +207,7 @@ augroup filetypes " {{{2
     au FileType mail    let mapleader = "\\" | let maplocalleader = "," | setl spell fo=wantq1 smc=0
     au FileType cpp     set makeprg=g++\ \-lpcrecpp\ %\ &&\ ./a.out
     au FileType haskell set nocul cocu=in makeprg=ghc\ %
+    au FileType pandoc  set makeprg=pandoc\ \-o\ output.pdf\ %
 augroup end
 augroup vimrc " {{{2
     au!
@@ -252,11 +259,25 @@ vmap <leader>l <Plug>VSurround]%a(<C-r><C-p>+)<Esc>
 " syntastic {{{2
 let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_enable_highlighting = 0
+let g:syntastic_java_javac_config_file_enabled = 1
 " YouCompleteMe {{{2
 let g:ycm_global_ycm_extra_conf = '$HOME/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_filetype_blacklist = {
+\ 'pdf' : 1,
+\}
 " Tagbar {{{2
 let g:tagbar_width = 80
 let g:tagbar_sort = 0
+" vim-pandoc {{{2
+let g:pandoc#filetypes#handled = ["pandoc", "markdown", "textile"]
+let g:pandoc#biblio#use_bibtool = 1
+let g:pandoc#completion#bib#mode = 'citeproc'
+let g:pandoc#biblio#bibs = ["articles/bib.bib"]
+let g:pandoc#syntax#conceal#use = 0
+let g:pandoc#folding#level = 999
+" vim-table-mode {{{2
+inoremap \<bar> <c-o>:TableModeToggle<cr>
+let g:table_mode_corner = '+'
 " Functions {{{1
 " Tabularize {{{2
 vnoremap <leader>t j:call <SID>table()<cr>

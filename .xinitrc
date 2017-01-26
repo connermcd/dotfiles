@@ -22,19 +22,16 @@ xbindkeys
 xbacklight -set 50
 
 # turns num lock on automatically
-xdotool key Num_Lock
+# xdotool key Num_Lock
 
 # sets background
-eval $(cat ~/.fehbg)
+~/.fehbg
 
 # activates libnotify
-/usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
-/usr/bin/notify-listener.py &>/dev/null &
+# /usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
+# /usr/bin/notify-listener.py &>/dev/null &
 
-# starts transmission-daemon (isn't a daemon itself)
-transmission-daemon
-
-# xcompmgr -cfD 5 &
-exec xmonad
+exec i3
+# exec i3 -V >> /var/log/i3/$(date +'%F-%k-%M-%S').log 2>&1
 
 # vim: ft=sh

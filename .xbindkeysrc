@@ -6,7 +6,7 @@
 "scrot -d 4"
   Print
 # Commands {{{1
-"chromium"
+"google-chrome-stable --disable-session-crashed-bubble"
   mod4 + b
 "thunar"
   mod4 + t
@@ -40,4 +40,7 @@
    Alt + k
 "xdotool keyup alt+l && xdotool key Right && xdotool keydown alt"
    Alt + l
+# Option + i {{{1
+"xsel | xvkbd -xsendevent -file -"
+  Alt + i
 # vim: fdm=marker

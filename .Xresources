@@ -18,6 +18,10 @@ URxvt*termName        : rxvt-unicode-256color
 URxvt*iso14755        : false
 URxvt*iso14755_52     : false
 
+URxvt.perl-ext-common: default,matcher
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+
 !black
 *color0 :            #222222
 *color8 :            #454545
