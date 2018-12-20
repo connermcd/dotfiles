@@ -1,8 +1,10 @@
 bind generic,index Q exit
-bind editor <space> noop
+bind pager u noop
+bind pager n noop
+bind index <space> sync-mailbox
 bind editor <Tab> complete-query
 
-bind browser gg  top-page
+bind browser gg   top-page
 bind browser G   bottom-page
 bind browser \Cb previous-page
 bind browser \Cf next-page
@@ -25,7 +27,7 @@ bind pager G   bottom
 bind pager j   next-line
 bind pager k   previous-line
 
-bind index,attach gg  first-entry
+bind index,attach gg   first-entry
 bind index,attach G   last-entry
 
 bind index,pager L   list-reply
@@ -40,6 +42,7 @@ bind index,pager \Cp previous-thread
 
 bind index,pager f forward-message
 bind index,pager p previous-undeleted
+bind index,pager n next-undeleted
 bind index,pager N next-unread
 bind index,pager P previous-unread
 
@@ -48,11 +51,13 @@ bind index,pager X print-message
 macro index Z "<shell-escape>mu find --clearlinks --format=links --linksdir=~/.mu/results " "mu find"
 macro index S "<change-folder-readonly>~/.mu/results<enter>" "mu find results"
 
-macro attach s <save-entry><kill-line>$HOME<enter> "Save to default directory for attachments"
+macro attach s <save-entry><kill-line>$HOME/Downloads<enter> "Save to default directory for attachments"
 
-macro index,pager,attach,compose gfg "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
-macro compose gfg "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
-macro index,pager,attach,compose gfs "<enter-command> source ~/.mutt/accounts/school<Enter><enter-command> my_hdr From: Conner McDaniel <mcdanielc@livemail.uthscsa.edu><Enter><change-folder>=INBOX<Enter>" "School"
-macro compose gfs "<esc>f\CuConner McDaniel <mcdanielc@livemail.uthscsa.edu><enter>
+macro pager u <pipe-entry>'urlscan'<enter> 'Follow links with urlscan'
+
+macro index,pager,attach,compose gi "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
+macro compose gi "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
+macro index,pager,attach,compose go "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
+macro compose gs "<esc>f\CuConner McDaniel <cmcda1@lsuhsc.edu><enter>
 
 # vim: ft=muttrc

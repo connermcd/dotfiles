@@ -31,7 +31,7 @@ hi Search         guifg=#000000   guibg=#8dabcd   guisp=#8dabcd   gui=NONE   cte
 hi Folded         guifg=#857b6f   guibg=#000000   guisp=NONE      gui=NONE   ctermfg=241    ctermbg=233    cterm=NONE
 hi StatusLineNC   guifg=NONE      guibg=#262626   guisp=#262626   gui=NONE   ctermfg=NONE   ctermbg=235    cterm=NONE
 hi VertSplit      guifg=#444444   guibg=#444444   guisp=NONE      gui=NONE   ctermfg=238    ctermbg=238    cterm=NONE
-hi StatusLineNC   guifg=#857b6f   guibg=#444444   guisp=NONE      gui=NONE   ctermfg=241    ctermbg=238    cterm=NONE
+" hi StatusLineNC   guifg=#857b6f   guibg=#444444   guisp=NONE      gui=NONE   ctermfg=241    ctermbg=238    cterm=NONE
 hi LineNr         guifg=#595959   guibg=NONE      guisp=NONE      gui=NONE   ctermfg=240    ctermbg=NONE   cterm=NONE
 hi SpecialKey     guifg=#87beeb   guibg=NONE      guisp=NONE      gui=NONE   ctermfg=117    ctermbg=NONE   cterm=NONE
 hi WarningMsg     guifg=#bd4848   guibg=#f9f8ff   guisp=#f9f8ff   gui=bold   ctermfg=131    ctermbg=15     cterm=bold

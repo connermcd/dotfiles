@@ -30,7 +30,8 @@ color markers      color9     color254
 color attachment   color254   default
 color search       color213   color245
 #color status                    J_black      J_status
-color status       white      black
+# color status       white      black
+color status       color249      color235
 # color indicator    color234   color136
 color indicator    black      white
 color tree         yellow     default   # arrow in threads
@@ -86,10 +87,10 @@ color index color136 color9   "~v~(~D)"   # thread with deleted (doesn't differe
 
 # message headers ------------------------------------------------------
 
-#color header        color240        color234        "^"
+color header        color240        color234        "^"
 color hdrdefault    white     default
 # color header        white     black   "^(From)"
-# color header        color33   black   "^(Subject)"
+color header        color33   black   "^(Subject)"
 
 # body -----------------------------------------------------------------
 

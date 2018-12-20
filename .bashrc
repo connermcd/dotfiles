@@ -26,16 +26,12 @@ export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
 
 export BLOG="$HOME/Dropbox/Tech/src/rb/connermcd.github.io"
-export BROWSER=/usr/bin/chromium
+export BROWSER=/usr/bin/qutebrowser
 export EDITOR=vim
 export HISTSIZE=10000
-export PASSWORD_FILE="$HOME/Dropbox/Archive/Important/passwords"
+export PASSWORD_FILE="$HOME/Google/Archive/Important/passwords"
 export TIMEFORMAT="=> %E"
 export ANDROID_HOME="/opt/android-sdks"
-# Notes {{{2
-export YEAR=2
-export MODULE=9
-export NOTES_DIR="$HOME/Dropbox/Archive/School/Med School/Notes"
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -46,13 +42,13 @@ export LESS_TERMCAP_ue=$'\e[0m'     # end underline
 export LESS_TERMCAP_us=$'\e[01;36m' # begin underline
 # Aliases {{{1
 alias calc="libreoffice --calc"
-alias cleanvim="vim -N -u NONE"
+alias cleanvim="/bin/vim -N -u NONE"
 alias cp="rsync --archive --human-readable --progress --verbose --whole-file"
 alias scp="rsync --archive --checksum --compress --human-readable --itemize-changes --rsh=ssh --stats --verbose"
 alias draw="libreoffice --draw"
 alias duh="du -h -d 0 [^.]*"
-alias em="mutt"
-alias grep="grep --color"
+alias em="neomutt"
+alias grep="grep --color=always"
 alias htop="sudo htop"
 alias i="irssi"
 alias impress="libreoffice --impress"
@@ -61,18 +57,18 @@ alias ls='ls --color=auto'
 alias m="vimpc"
 alias myip="curl http://myip.dnsomatic.com && echo ''"
 alias open="xdg-open"
-alias pandoc="pandoc --latex-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
+alias pandoc="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
 alias pretty-json="python2 -mjson.tool"
 alias print="lpr -P 'Deskjet_F4500'"
-alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
-alias slideshow="pandoc -t beamer -V theme:Boadilla -V colortheme:beaver -o slideshow.pdf"
+# alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
+alias screencast="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
+alias screencast-no-sound="ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
+alias slideshow="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex -t beamer -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 alias t="/home/connermcd/Dropbox/Tech/todo/todo.sh"
 alias tran="transmission-remote-cli"
-alias unneeded="sudo pacman -Rsn \$(pacman -Qqdt)"
 alias usermount="sudo mount -o gid=users,fmask=113,dmask=002"
 alias vb="VBoxManage"
-alias vim="vim --servername a"
 alias webcam="mplayer -noborder -tv driver=v4l2:gain=1:width=320:height=240:device=/dev/video0:fps=10:outfmt=rgb16 -geometry 100%:97% tv://"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
 alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
@@ -83,21 +79,12 @@ compress-pdf() {
    gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH "$1"
 }
 cut-video() {
-   ffmpeg -i "$1" -ss "$2" -to "$3" -c copy cut.mp4
+   ffmpeg -i "$1" -ss "$2" -to "$3" -async 1 cut.mp4
 }
 concat-video() {
    ffmpeg -i "$1" -c copy -bsf:v h264_mp4toannexb -f mpegts intermediate1.ts
    ffmpeg -i "$2" -c copy -bsf:v h264_mp4toannexb -f mpegts intermediate2.ts
    ffmpeg -i "concat:intermediate1.ts|intermediate2.ts" -c copy -bsf:a aac_adtstoasc concat.mp4 && rm intermediate1.ts intermediate2.ts
-}
-doigrep() {
-    [ $# -ge 1 -a -f "$1" ] && input="$1" || input="-"
-    grep -oP "\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b" "$input"
-}
-doi2bib() {
-   echo >> bib.bib
-   curl -s "http://api.crossref.org/works/$1/transform/application/x-bibtex" >>bib.bib
-   echo >> bib.bib
 }
 pmid2bib() {
    curl -s "https://www.ncbi.nlm.nih.gov/pubmed/$1?report=xml&format=raw" | sed -e 's/&gt;/>/g' -e 's/&lt;/</g' | med2xml | xml2bib -nb -b >>bib.bib
@@ -115,6 +102,10 @@ mpc -q toggle
 mplayer /usr/lib/libreoffice/share/gallery/sounds/gong.wav
 EOF
 
+}
+pacman-purge() {
+   sudo paccache -r
+   sudo pacman -Rsn $(pacman -Qqdt)
 }
 pacsize() {
    sudo pacman -Qi | \
@@ -138,9 +129,6 @@ ptime() {
 r() {
    [[ "$RANGER_LEVEL" ]] && exit || ranger
 }
-recent() {
-   find $HOME/Dropbox/ -type f -regex ".*\.\(md\|txt\)" -mtime -$1 -not -path "*dropbox*" -exec vim "{}" +
-}
 speedup() {
    </dev/null ffmpeg -i "$*" -filter atempo=1.5 "${*%%.mp3}-150.mp3"
 }
@@ -154,7 +142,8 @@ twitch() {
    CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
    QUALITY="ultrafast"  # one of the many FFMPEG preset
    AUDIO_RATE="44100"
-   STREAM_KEY=$(pass show twitchkey) # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
+   # STREAM_KEY=$(pass show twitchkey) # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
+   STREAM_KEY=
    SERVER="live-dfw" # twitch server in frankfurt, see http://bashtech.net/twitch/ingest.php for list
 
    ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0.0 -f alsa -i hw:2,0 -f flv -ac 2 -ar $AUDIO_RATE \

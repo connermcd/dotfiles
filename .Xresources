@@ -4,8 +4,7 @@ URxvt*depth           : 32
 URxvt*buffered        : true
 URxvt*foreground      : #aaaaaa
 ! URxvt*background      : [85]#000000
-URxvt*background      : #000000
-URxvt*shading         : 30
+URxvt*background      : #262626
 URxvt*fading          : 10%
 URxvt*internalBorder  : 5
 URxvt*scrollBar       : false
@@ -17,32 +16,74 @@ URxvt*matcher.button  : 1
 URxvt*termName        : rxvt-unicode-256color
 URxvt*iso14755        : false
 URxvt*iso14755_52     : false
+!URxvt*transparent     : true
+URxvt*shading         : 30
 
-URxvt.perl-ext-common: default,matcher
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.iso14755: False
+URxvt.perl-ext-common: default,matcher,clipboard
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
 
-!black
-*color0 :            #222222
-*color8 :            #454545
-!red
-*color1 :            #B22222
-*color9 :            #FA8072
-!green
-*color2 :            #556B2F
-*color10:            #779A3E
-!yellow
-*color3 :            #B8860B
-*color11:            #DAA520
-!blue
-*color4 :            #4682B4
-*color12:            #6495ED
-!magenta
-*color5 :            #9932CC
-*color13:            #DA70D6
-!cyan
-*color6 :            #87CEEB
-*color14:            #B0E0E6
-!white
-*color7 :            #C0C0C0
-*color15:            #FFFFFF
+!! Personal colors {{{1
+!!black
+!*color0 :            #222222
+!*color8 :            #454545
+!!red
+!*color1 :            #B22222
+!*color9 :            #FA8072
+!!green
+!*color2 :            #556B2F
+!*color10:            #779A3E
+!!yellow
+!*color3 :            #B8860B
+!*color11:            #DAA520
+!!blue
+!*color4 :            #4682B4
+!*color12:            #6495ED
+!!magenta
+!*color5 :            #9932CC
+!*color13:            #DA70D6
+!!cyan
+!*color6 :            #87CEEB
+!*color14:            #B0E0E6
+!!white
+!*color7 :            #C0C0C0
+!*color15:            #FFFFFF
+! Apprentice colorscheme {{{1
+! special
+*.foreground:   #bcbcbc
+*.background:   #262626
+*.cursorColor:  #bcbcbc
+
+! black
+*.color0:       #1c1c1c
+*.color8:       #444444
+
+! red
+*.color1:       #af5f5f
+*.color9:       #ff8700
+
+! green
+*.color2:       #5f875f
+*.color10:      #87af87
+
+! yellow
+*.color3:       #87875f
+*.color11:      #ffffaf
+
+! blue
+*.color4:       #5f87af
+*.color12:      #8fafd7
+
+! magenta
+*.color5:       #5f5f87
+*.color13:      #8787af
+
+! cyan
+*.color6:       #5f8787
+*.color14:      #5fafaf
+
+! white
+*.color7:       #6c6c6c
+*.color15:      #ffffff

@@ -1,17 +1,8 @@
 # System Control {{{1
 "lock-screen"
   control + mod4 + q
-"sudo shutdown -h 0"
-  control + mod4 + Delete
 "scrot -d 4"
   Print
-# Commands {{{1
-"google-chrome-stable --disable-session-crashed-bubble"
-  mod4 + b
-"thunar"
-  mod4 + t
-"search-courses"
-  control + mod4 + f
 # Brightness control {{{1
 "xbacklight -inc 20"
    XF86MonBrightnessUp

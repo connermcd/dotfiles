@@ -1,30 +1,41 @@
 # first things first
-set editor              = "vim -c start"
-set realname            = "Conner McDaniel"
+set editor      = "vim"
+set realname    = "Conner McDaniel"
 
-source ~/.mutt/accounts/gmail
-source ~/.mutt/muttgpg
+set mail_check  = 0
+set copy        = no
+set mbox_type   = Maildir
+set folder      = ~/.mail/lsuhsc
+set spoolfile   = +INBOX
+
+bind index,pager,attach g noop
+source ~/.mutt/accounts/lsuhsc
+# source ~/.mutt/muttgpg
 source ~/.mutt/keybindings
 source ~/.mutt/colorscheme
 
-set mbox_type           = Maildir
-set mbox                = "+[Gmail].All Mail"
-set postponed           = "+[Gmail].Drafts"
-set mail_check          = 0
+mailboxes +INBOX \
+          +Archive \
+          +Research \
+          +Sent \
+          ~/.mail/gmail/INBOX \
+          ~/.mail/gmail/"[Gmail].All_Mail" \
+          ~/.mail/gmail/"[Gmail].Sent_Mail" \
+          ~/.mail/gmail/"[Gmail].Starred"
 
-# goobook
-set sort_alias          = alias
-set reverse_alias       = yes
-
-mailboxes +INBOX +UTHSCSA
 alternative_order text/plain text/enriched text/html
 auto_view text/html
+
+# contacts
+set query_command       = "mu cfind --format=mutt-ab '%s'"
+set sort_alias          = alias
+set reverse_alias       = yes
 
 set print_command="muttdoc | pandoc --template=email.tex -V fullpage --latex-engine=xelatex --listings -o ~/email.pdf"
 
 ignore *
-unignore from: subject to cc date x-mailer x-url user-agent
-hdr_order date from to cc subject
+unignore date from to cc subject x-mailer x-url user-agent
+hdr_order date from cc subject
 
 set header_cache        = ~/.mutt/cache/headers
 set message_cachedir    = ~/.mutt/cache/bodies
@@ -32,9 +43,18 @@ set certificate_file    = ~/.mutt/certificates
 set mailcap_path        = ~/.mutt/mailcap
 set signature           = ~/.mutt/signature
 
+# set sidebar_divider_char = '│'
+# set sidebar_folder_indent = yes
+# set sidebar_format = "%B%?n?*?"
+# set sidebar_indent_string = ' '
+# set sidebar_short_path = yes
+# set sidebar_visible = yes
+
+set date_format         = "%m/%d/%y %l:%M%P"
 set forward_edit        = ask-yes
 set forward_format      = "Fwd: %s"
 set include             = yes
+set index_format        = "%2C %Z %d %-20.20F %s (%-4.4c)"
 set mime_forward        = yes
 set mime_forward_rest   = yes
 set move                = no

@@ -9,11 +9,11 @@ fi
 xsetroot -cursor_name left_ptr
 
 # reads X configuration
-xrdb ~/.Xresources
+xrdb $HOME/.Xresources
 
 # sets key mappings - have to do it twice for some reason
-xmodmap ~/.Xmodmap
-xmodmap ~/.Xmodmap
+xmodmap $HOME/.Xmodmap
+xmodmap $HOME/.Xmodmap
 
 # sets custom key bindings
 xbindkeys
@@ -25,7 +25,7 @@ xbacklight -set 50
 # xdotool key Num_Lock
 
 # sets background
-~/.fehbg
+nitrogen --restore &
 
 # activates libnotify
 # /usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
