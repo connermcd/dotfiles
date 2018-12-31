@@ -1,8 +1,6 @@
 *
-!.irssi/
 !.mutt/
 !.vim/
-!.Xmodmap
 !.Xresources
 !.abcde.conf
 !.bashrc
@@ -19,3 +17,6 @@
 !.xmobarrc
 !.xmonad/xmonad.hs
 !.zathurarc
+!.config/i3
+!.config/i3status
+!.config/systemd

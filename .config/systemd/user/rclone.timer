@@ -1,0 +1,10 @@
+[Unit]
+Description=Google Drive synchronization timer
+
+[Timer]
+OnBootSec=2m
+OnUnitActiveSec=5m
+Unit=rclone.service
+
+[Install]
+WantedBy=timers.target

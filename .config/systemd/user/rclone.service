@@ -1,0 +1,11 @@
+[Unit]
+Description=RClone
+Documentation=man:rclone(1)
+After=network.target network-online.target dbus.socket
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rclone -v sync --drive-use-trash=false --drive-export-formats pdf --transfers=1 Google google:
+
+[Install]
+WantedBy=default.target

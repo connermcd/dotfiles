@@ -1,0 +1,10 @@
+[Unit]
+Description=DLNS Server
+After=network.target network-online.target dbus.socket
+
+[Service]
+Type=simple
+ExecStart=minidlnad -r -S -f /home/connermcd/.config/minidlna/minidlna.conf -P /home/connermcd/.config/minidlna/minidlna.pid
+
+[Install]
+WantedBy=default.target

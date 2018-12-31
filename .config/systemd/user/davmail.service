@@ -1,0 +1,10 @@
+[Unit]
+Description=Exchange tunneling service
+After=network.target network-online.target dbus.socket
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/davmail
+
+[Install]
+WantedBy=default.target
