@@ -28,5 +28,3 @@
 	ds = diff --stat=160,120
 	dh1 = diff HEAD~1
 	l = log --simplify-merges --graph --pretty="tformat:%C(yellow)%h%Creset\\ %Cgreen(%ar)%Creset\\ %C(blue)<%an>%Creset\\ %C(red)%d%Creset\\ %s"
-[init]
-	templatedir = ~/.git_template

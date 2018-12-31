@@ -25,7 +25,7 @@ export YELLOW='\033[1;33m'
 export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
 
-export BLOG="$HOME/Dropbox/Tech/src/rb/connermcd.github.io"
+export BLOG="$HOME/Google/Tech/src/rb/connermcd.github.io"
 export BROWSER=/usr/bin/qutebrowser
 export EDITOR=vim
 export HISTSIZE=10000
@@ -56,6 +56,7 @@ alias l="ls -al"
 alias ls='ls --color=auto'
 alias m="vimpc"
 alias myip="curl http://myip.dnsomatic.com && echo ''"
+alias n="nnn"
 alias open="xdg-open"
 alias pandoc="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
 alias pretty-json="python2 -mjson.tool"
@@ -65,7 +66,6 @@ alias screencast="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -
 alias screencast-no-sound="ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias slideshow="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex -t beamer -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
-alias t="/home/connermcd/Dropbox/Tech/todo/todo.sh"
 alias tran="transmission-remote-cli"
 alias usermount="sudo mount -o gid=users,fmask=113,dmask=002"
 alias vb="VBoxManage"
@@ -125,9 +125,6 @@ ptime() {
       xargs -0  mplayer -vo dummy -ao dummy -identify 2>/dev/null | \
       perl -nle '/ID_LENGTH=([0-9\.]+)/ && (\$t +=\$1) && printf \"%02d:%02d:%02d\n\",\$t/3600,\$t/60%60,\$t%60' | \
       tail -n 1
-}
-r() {
-   [[ "$RANGER_LEVEL" ]] && exit || ranger
 }
 speedup() {
    </dev/null ffmpeg -i "$*" -filter atempo=1.5 "${*%%.mp3}-150.mp3"

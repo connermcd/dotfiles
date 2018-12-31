@@ -32,6 +32,7 @@ nitrogen --restore &
 # /usr/bin/notify-listener.py &>/dev/null &
 
 exec i3
+#exec cinnamon
 # exec i3 -V >> /var/log/i3/$(date +'%F-%k-%M-%S').log 2>&1
 
 # vim: ft=sh

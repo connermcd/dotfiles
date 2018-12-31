@@ -127,11 +127,12 @@ nnoremap viz v[zo]z$
 nnoremap '.  :e %:h<C-z>
 nnoremap ''  :b#<cr>
 nnoremap '/  :e /
-nnoremap 'g  :e ~/Google/
+nnoremap 'g  :e ~/Google/<C-z>
 nnoremap 'f  :e 
 nnoremap 'h  :e ~/
 nnoremap 'k  :b <C-z>
 "nnoremap 'l  :FufTag<cr>
+nnoremap 'n  :e ~/Google/Notes/<C-z>
 nnoremap 'r  :e ~/.bashrc<cr>
 nnoremap 'v  :e $MYVIMRC<cr>
 " Leaders {{{2
@@ -168,8 +169,10 @@ nnoremap <RightMouse> "+]p
 inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 inoremap <bar>( <esc>d(s
-nnoremap <C-n> :lne<cr>z.
-nnoremap <C-p> :lp<cr>z.
+nnoremap <C-n> :cnext<cr>z.
+nnoremap <C-p> :cpprev<cr>z.
+" nnoremap <C-S-n> :lnext<cr>z.
+" nnoremap <C-S-p> :lprev<cr>z.
 nnoremap Q :qa!<cr>
 
 " Steve Losh
@@ -199,13 +202,33 @@ augroup vimrc
     au ColorScheme * highlight ExtraWhitespace guibg=#bd5353 ctermbg=131
     au BufWinEnter * match ExtraWhitespace /\s\+$\| \+\ze\t/
     au BufWrite * match ExtraWhitespace /\s\+$\| \+\ze\t/
+    au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG
 augroup end
 " Functions {{{1
+" Pack {{{2
 command! PackUpdate echo system('find ~/.vim/pack/bundle/start/*/. -maxdepth 0 -execdir pwd \; -execdir git pull \;')
 command! PackList echo system('ls ~/.vim/pack/bundle/start')
 command! -nargs=1 PackInstall echo system('cd ~/.vim/pack/bundle/start && git clone git@github.com:<args>.git')
 command! -nargs=1 PackUninstall echo system('rm -rf ~/.vim/pack/bundle/start/<args>')
-
+" Ix {{{2
+command! -range=% Ix :<line1>,<line2>call Ix()
+fun! Ix() range
+    call setreg("+", system('ix', join(getline(a:firstline, a:lastline), "\n")))
+endfun
+" NewPost {{{2
+command! -nargs=1 NewPost call NewPost("<args>")
+fun! NewPost(args)
+    let l:file = "$BLOG/_posts/" . strftime("%Y-%m-%d") . "-" . tolower(substitute(a:args, " ", "-", "g")) . ".markdown"
+    exe "e!" . l:file
+    put ='---'
+    put ='date: '''.strftime("%Y-%m-%d H:M:S").''''
+    put ='layout: post'
+    put ='slug: '.l:file
+    put ='title: '.a:args
+    put ='categories:'
+    put ='- blog'
+    put ='---'
+endfun
 " Tabularize {{{2
 vnoremap <leader>t j:call <SID>table()<cr>
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
