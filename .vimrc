@@ -133,6 +133,7 @@ nnoremap 'h  :e ~/
 nnoremap 'k  :b <C-z>
 "nnoremap 'l  :FufTag<cr>
 nnoremap 'n  :e ~/Google/Notes/<C-z>
+nnoremap 'p  :e ~/Google/Archive/Important/passwords.gpg<cr>
 nnoremap 'r  :e ~/.bashrc<cr>
 nnoremap 'v  :e $MYVIMRC<cr>
 " Leaders {{{2
