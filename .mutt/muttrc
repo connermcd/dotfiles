@@ -1,15 +1,15 @@
 # first things first
-set editor      = "vim"
+set editor      = "vim +start"
 set realname    = "Conner McDaniel"
 
 set mail_check  = 0
 set copy        = no
 set mbox_type   = Maildir
-set folder      = ~/.mail/lsuhsc
+set folder      = ~/.mail/gmail
 set spoolfile   = +INBOX
 
 bind index,pager,attach g noop
-source ~/.mutt/accounts/lsuhsc
+source ~/.mutt/accounts/gmail
 # source ~/.mutt/muttgpg
 source ~/.mutt/keybindings
 source ~/.mutt/colorscheme

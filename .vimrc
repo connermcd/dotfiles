@@ -124,23 +124,25 @@ nnoremap viz v[zo]z$
 " Mappings {{{1
 " File navigation {{{2
 "nnoremap '<Space> :FufBookmarkDir<cr>
-nnoremap '.  :e %:h<C-z>
+nnoremap '.  :e %:h<C-d>
 nnoremap ''  :b#<cr>
-nnoremap '/  :e /
-nnoremap 'g  :e ~/Google/<C-z>
-nnoremap 'f  :e 
-nnoremap 'h  :e ~/
-nnoremap 'k  :b <C-z>
+nnoremap ';  :e %:r<C-d>
+nnoremap '/  :e /<C-d>
+nnoremap 'd  :e ~/Documents/<C-d>
+nnoremap 'f  :e <C-d>
+nnoremap 'h  :e ~/<C-d>
+nnoremap 'k  :b <C-d>
 "nnoremap 'l  :FufTag<cr>
-nnoremap 'n  :e ~/Google/Notes/<C-z>
-nnoremap 'p  :e ~/Google/Archive/Important/passwords.gpg<cr>
+nnoremap 'n  :e ~/Documents/Notes/<C-d>
+nnoremap 'p  :e ~/Documents/Archive/Important/passwords.gpg<cr>
 nnoremap 'r  :e ~/.bashrc<cr>
 nnoremap 'v  :e $MYVIMRC<cr>
 " Leaders {{{2
 nnoremap <leader>\ :!chmod +x %<cr>:!%:p<cr>
 nnoremap <leader>. :cd %:h<cr>
+inoremap <leader>d <C-r>=strftime('%D %l:%M%P')<cr>
+inoremap <leader>D <C-r>=strftime('%D')<cr>
 nnoremap <leader>d "_d
-nnoremap <leader>e :term ++curwin neomutt<cr>
 inoremap <leader>i import code; code.interact(local=dict(globals(), **locals()))<esc>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
@@ -171,7 +173,7 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <C-w> <C-g>u<C-w>
 inoremap <bar>( <esc>d(s
 nnoremap <C-n> :cnext<cr>z.
-nnoremap <C-p> :cpprev<cr>z.
+nnoremap <C-p> :cprev<cr>z.
 " nnoremap <C-S-n> :lnext<cr>z.
 " nnoremap <C-S-p> :lprev<cr>z.
 nnoremap Q :qa!<cr>

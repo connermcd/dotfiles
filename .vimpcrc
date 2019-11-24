@@ -1,7 +1,7 @@
-hi tab whitefg
-hi status whitefg
-hi current greenfg
-hi id yellowfg
+hi tab default white
+hi status default white
+hi current default green
+hi id default yellow
 
 set window playlist
 set autoscroll

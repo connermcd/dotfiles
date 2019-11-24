@@ -25,7 +25,7 @@
 color normal       white      default
 color error        color9     default
 color tilde        color235   default
-color message      color244   default
+color message      white      default
 color markers      color9     color254
 color attachment   color254   default
 color search       color213   color245
@@ -54,15 +54,15 @@ color index   color166   default   "~E"            # expired messages
 color index   color33    default   "~N"            # new messages
 color index   color33    default   "~O"            # old messages
 color index   color61    default   "~Q"            # messages that have been replied to
-color index   color240   default   "~R"            # read messages
-color index   black      default   "~U"            # unread messages
-color index   black      default   "~U~$"          # unread, unreferenced messages
+color index   color245   default   "~R"            # read messages
+color index   green      default   "~U"            # unread messages
+color index   green      default   "~U~$"          # unread, unreferenced messages
 color index   color241   default   "~v"            # messages part of a collapsed thread
 color index   color241   default   "~P"            # messages from me
 color index   green      default   "~p!~F"         # messages to me
 color index   green      default   "~N~p!~F"       # new messages to me
 color index   green      default   "~U~p!~F"       # unread messages to me
-color index   color240   default   "~R~p!~F"       # messages to me
+color index   color245   default   "~R~p!~F"       # messages to me
 color index   color9     default   "~F"            # flagged messages
 color index   color9     default   "~F~p"          # flagged messages to me
 color index   color9     default   "~N~F"          # new flagged messages
@@ -90,7 +90,7 @@ color index color136 color9   "~v~(~D)"   # thread with deleted (doesn't differe
 color header        color240        color234        "^"
 color hdrdefault    white     default
 # color header        white     black   "^(From)"
-color header        color33   black   "^(Subject)"
+color header        color4    black   "^(Subject)"
 
 # body -----------------------------------------------------------------
 
@@ -103,7 +103,7 @@ color quoted4       cyan      default
 color signature     white     default
 color bold          color235  default
 color underline     color235  default
-color normal        white     default
+color normal        color245  default
 #
 color body          color245  default   "[;:][-o][)/(|]"     # emoticons
 color body          color245  default   "[;:][)(|]"          # emoticons

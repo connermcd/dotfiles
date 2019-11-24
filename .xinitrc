@@ -10,10 +10,7 @@ xsetroot -cursor_name left_ptr
 
 # reads X configuration
 xrdb $HOME/.Xresources
-
-# sets key mappings - have to do it twice for some reason
-xmodmap $HOME/.Xmodmap
-xmodmap $HOME/.Xmodmap
+setxkbmap -option ctrl:nocaps
 
 # sets custom key bindings
 xbindkeys
@@ -25,11 +22,7 @@ xbacklight -set 50
 # xdotool key Num_Lock
 
 # sets background
-nitrogen --restore &
-
-# activates libnotify
-# /usr/lib/notification-daemon-1.0/notification-daemon &>/dev/null &
-# /usr/bin/notify-listener.py &>/dev/null &
+~/.fehbg &
 
 exec i3
 #exec cinnamon

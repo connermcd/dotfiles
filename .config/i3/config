@@ -89,10 +89,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+Shift+h split v
+bindsym $mod+Shift+h split h
 
 # split in vertical orientation
-bindsym $mod+Shift+v split h
+bindsym $mod+Shift+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -184,25 +184,26 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        output HDMI2
-        tray_output none
-        colors {
-                background #262626
-                separator #bcbcbc
-                focused_workspace #626262 #626262 #ffffff
-                inactive_workspace #262626 #262626 #bcbcbc
-        }
+    output HDMI2
+    tray_output none
+    colors {
+            background #262626
+            separator #bcbcbc
+            focused_workspace #626262 #626262 #ffffff
+            inactive_workspace #262626 #262626 #bcbcbc
+    }
 }
 
 bar {
-        output eDP1
-        status_command i3status
-        colors {
-                background #262626
-                separator #bcbcbc
-                focused_workspace #626262 #626262 #ffffff
-                inactive_workspace #262626 #262626 #bcbcbc
-        }
+    output eDP1
+    status_command i3status
+    colors {
+            background #262626
+            separator #bcbcbc
+            focused_workspace #626262 #626262 #ffffff
+            inactive_workspace #262626 #262626 #bcbcbc
+    }
 }
+bindsym $mod+Shift+b bar mode toggle
 
 exec xrandr --output HDMI2 --auto --left-of eDP1

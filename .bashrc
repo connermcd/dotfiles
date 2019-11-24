@@ -25,13 +25,14 @@ export YELLOW='\033[1;33m'
 export GREEN='\033[0;32m'
 export RESET_COLOR='\033[0m'
 
-export BLOG="$HOME/Google/Tech/src/rb/connermcd.github.io"
+export BLOG="$HOME/Documents/Tech/src/rb/connermcd.github.io"
 export BROWSER=/usr/bin/qutebrowser
 export EDITOR=vim
+export SANE_DEFAULT_DEVICE="hpaio:/net/Deskjet_F4500_series?ip=192.168.1.4"
 export HISTSIZE=10000
-export PASSWORD_FILE="$HOME/Google/Archive/Important/passwords"
+export PASSWORD_FILE="$HOME/Documents/Archive/Important/passwords"
 export TIMEFORMAT="=> %E"
-export ANDROID_HOME="/opt/android-sdks"
+export QT_PLUGIN_PATH=/usr/lib/qt/plugins
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -49,25 +50,25 @@ alias draw="libreoffice --draw"
 alias duh="du -h -d 0 [^.]*"
 alias em="neomutt"
 alias grep="grep --color=always"
+alias gv="vim -c 'GV'"
 alias htop="sudo htop"
-alias i="irssi"
 alias impress="libreoffice --impress"
 alias l="ls -al"
 alias ls='ls --color=auto'
+alias linode='ssh conner@linode'
 alias m="vimpc"
 alias myip="curl http://myip.dnsomatic.com && echo ''"
-alias n="nnn"
 alias open="xdg-open"
 alias pandoc="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
 alias pretty-json="python2 -mjson.tool"
 alias print="lpr -P 'Deskjet_F4500'"
+alias r='ranger'
 # alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
 alias screencast="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias screencast-no-sound="ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias slideshow="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex -t beamer -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
 alias tran="transmission-remote-cli"
-alias usermount="sudo mount -o gid=users,fmask=113,dmask=002"
 alias vb="VBoxManage"
 alias webcam="mplayer -noborder -tv driver=v4l2:gain=1:width=320:height=240:device=/dev/video0:fps=10:outfmt=rgb16 -geometry 100%:97% tv://"
 alias webcast-external="ffmpeg -f alsa -ac 2 -i hw:1,0 -f v4l2 -itsoffset 1 -s 640x480 -i /dev/video0 -acodec pcm_s16le -vcodec libx264 -y output.mkv"
@@ -101,7 +102,6 @@ notify-send "Time to go"
 mpc -q toggle
 mplayer /usr/lib/libreoffice/share/gallery/sounds/gong.wav
 EOF
-
 }
 pacman-purge() {
    sudo paccache -r

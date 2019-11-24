@@ -53,11 +53,11 @@ macro index S "<change-folder-readonly>~/.mu/results<enter>" "mu find results"
 
 macro attach s <save-entry><kill-line>$HOME/Downloads<enter> "Save to default directory for attachments"
 
-macro pager u <pipe-entry>'urlscan'<enter> 'Follow links with urlscan'
+macro pager u <pipe-entry>'urlscan --run "qutebrowser {}"'<enter> 'Follow links with urlscan'
 
-macro index,pager,attach,compose gi "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
+macro index,pager,attach,compose go "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
 macro compose gi "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
-macro index,pager,attach,compose go "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
+macro index,pager,attach,compose gi "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
 macro compose gs "<esc>f\CuConner McDaniel <cmcda1@lsuhsc.edu><enter>
 
 # vim: ft=muttrc
