@@ -25,7 +25,7 @@ xbacklight -set 50
 ~/.fehbg &
 
 exec i3
-#exec cinnamon
+# exec startplasma-x11
 # exec i3 -V >> /var/log/i3/$(date +'%F-%k-%M-%S').log 2>&1
 
 # vim: ft=sh

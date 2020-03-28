@@ -66,9 +66,9 @@ bindsym $mod+space exec dmenu_run -nb "#262627" -nf "#CBCBCB" -sb "#5f875f" -sf 
 
 # change focus
 bindsym $mod+j focus left
-bindsym $mod+k focus down
+bindsym $mod+k focus right
 bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+semicolon focus down
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left

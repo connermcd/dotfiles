@@ -64,7 +64,7 @@ alias pretty-json="python2 -mjson.tool"
 alias print="lpr -P 'Deskjet_F4500'"
 alias r='ranger'
 # alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
-alias screencast="ffmpeg -f alsa -ac 2 -i hw:1,0 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
+alias screencast="ffmpeg -f pulse -i 3 -ac 2 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias screencast-no-sound="ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias slideshow="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex -t beamer -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
@@ -133,20 +133,43 @@ twitch() {
    INRES="1920x1080" # input resolution
    OUTRES="1280x720" # output resolution
    FPS="30" # target FPS
+   # GOP="$(( $FPS * 2 ))" # i-frame interval, should be double of FPS
    GOP="60" # i-frame interval, should be double of FPS
-   GOPMIN="30" # min i-frame interval, should be equal to fps
+   GOPMIN="$FPS" # min i-frame interval, should be equal to fps
    THREADS="4" # max 6
    CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
    QUALITY="ultrafast"  # one of the many FFMPEG preset
    AUDIO_RATE="44100"
-   # STREAM_KEY=$(pass show twitchkey) # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
-   STREAM_KEY=
+   STREAM_KEY="$(pass show web/twitch/key)"
    SERVER="live-dfw" # twitch server in frankfurt, see http://bashtech.net/twitch/ingest.php for list
+   PROBESIZE="42M"
 
-   ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0.0 -f alsa -i hw:2,0 -f flv -ac 2 -ar $AUDIO_RATE \
+   ffmpeg \
+      -f x11grab -s "$INRES" -r "$FPS" -probesize $PROBESIZE -i :0.0 \
+      -f pulse -i 3 -f flv -ac 2 -ar $AUDIO_RATE \
       -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b:v $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p\
       -s $OUTRES -preset $QUALITY -acodec libmp3lame -threads $THREADS -strict normal \
       -bufsize $CBR "rtmp://$SERVER.twitch.tv/app/$STREAM_KEY"
+}
+youtube-stream() {
+   INRES="1920x1080" # input resolution
+   OUTRES="1280x720" # output resolution
+   FPS="30" # target FPS
+   GOP="$(( $FPS * 2 ))" # i-frame interval, should be double of FPS
+   GOPMIN="$FPS" # min i-frame interval, should be equal to fps
+   THREADS="4" # max 6
+   CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
+   QUALITY="ultrafast"  # one of the many FFMPEG preset
+   AUDIO_RATE="44100"
+   STREAM_KEY="$(pass show web/youtube/key)"
+   PROBESIZE="42M"
+
+   ffmpeg \
+      -f x11grab -s "$INRES" -r "$FPS" -probesize $PROBESIZE -i :0.0 \
+      -f pulse -i 3 -f flv -ac 2 -ar $AUDIO_RATE \
+      -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b:v $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p\
+      -s $OUTRES -preset $QUALITY -acodec libmp3lame -threads $THREADS -strict normal \
+      -bufsize $CBR "rtmp://a.rtmp.youtube.com/live2/$STREAM_KEY"
 }
 webrick() {
    port="${1:-3000}"
