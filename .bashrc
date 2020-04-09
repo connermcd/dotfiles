@@ -1,7 +1,13 @@
 # Setup {{{1
 stty -ixon -ixoff # turns off CTRL-S
 [[ $- != *i* ]] && return
+bind '"\C-f":"cd_with_fzf\n"'
+bind '"\C-o":"open_with_fzf\n"'
+bind '"\C-v":"vim\n"'
 
+export BROWSER=/usr/bin/qutebrowser
+export EDITOR=vim
+export FZF_DEFAULT_COMMAND="fd -H"
 export PROMPT_COMMAND=__prompt_command
 
 __prompt_command() {
@@ -19,20 +25,6 @@ ps1_hostname() {
 }
 
 bind TAB:menu-complete
-# Env {{{1
-export RED='\033[0;31m'
-export YELLOW='\033[1;33m'
-export GREEN='\033[0;32m'
-export RESET_COLOR='\033[0m'
-
-export BLOG="$HOME/Documents/Tech/src/rb/connermcd.github.io"
-export BROWSER=/usr/bin/qutebrowser
-export EDITOR=vim
-export SANE_DEFAULT_DEVICE="hpaio:/net/Deskjet_F4500_series?ip=192.168.1.4"
-export HISTSIZE=10000
-export PASSWORD_FILE="$HOME/Documents/Archive/Important/passwords"
-export TIMEFORMAT="=> %E"
-export QT_PLUGIN_PATH=/usr/lib/qt/plugins
 # less colors {{{2
 export LESS_TERMCAP_mb=$'\e[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\e[01;34m' # begin bold
@@ -76,6 +68,16 @@ alias webcast-internal="ffmpeg -f alsa -ac 2 -i hw:0,0 -f v4l2 -itsoffset 1 -s 6
 alias wifi="sudo wifi-menu -o"
 alias writer="libreoffice --writer"
 # Functions {{{1
+open_with_fzf() {
+# fd -t f -H | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
+fd -t f -H | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open &
+}
+cd_with_fzf() {
+cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)"
+}
+pacs() {
+sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+}
 compress-pdf() {
    gs -o "$2" -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH "$1"
 }

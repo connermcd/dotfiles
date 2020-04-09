@@ -35,17 +35,9 @@ floating_modifier $mod
 bindsym $mod+Return exec i3-sensible-terminal
 
 # start a browser
+bindsym $mod+Shift+p exec passmenu
 bindsym $mod+b exec qutebrowser
-bindsym $mod+g exec qutebrowser ":quickmark-load google"
-bindsym $mod+c exec qutebrowser ":quickmark-load cal"
 bindsym $mod+y exec qutebrowser ":quickmark-load youtube"
-bindsym $mod+e exec qutebrowser ":quickmark-load epic"
-
-# start vim
-bindsym $mod+v exec urxvt -e vim
-# for_window [title="[No Name]"] fullscreen enable
-
-bindsym $mod+r exec urxvt -e nnn /home/connermcd/Google/Reading/Medicine/
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -65,10 +57,10 @@ bindsym $mod+space exec dmenu_run -nb "#262627" -nf "#CBCBCB" -sb "#5f875f" -sf 
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus right
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus down
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -77,10 +69,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -89,10 +81,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+Shift+h split h
-
-# split in vertical orientation
-bindsym $mod+Shift+v split v
+bindsym $mod+backslash split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -101,7 +90,7 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-# bindsym $mod+e layout toggle split
+bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle

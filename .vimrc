@@ -51,6 +51,7 @@ set visualbell t_vb=".
 set wildcharm=<C-z>
 set wildignorecase
 set wildmenu
+set wildmode=longest,list
 set wrapmargin=0
 set wrap
 " Necessary order
@@ -96,7 +97,11 @@ let g:pandoc#biblio#use_bibtool = 1
 let g:pandoc#completion#bib#mode = 'citeproc'
 let g:pandoc#biblio#bibs = ["articles/bib.bib"]
 let g:pandoc#syntax#conceal#use = 0
+let g:pandoc#folding#fdc = 0
 let g:pandoc#folding#level = 999
+" netrw {{{2
+let g:netrw_http_cmd = "qutebrowser"
+let g:netrw_browsex_viewer = "xdg-open"
 " Pandoc and Notes {{{2
 command! -nargs=1 Ngrep lvimgrep "<args>" $NOTES_DIR/**/*.txt
 nnoremap <leader>[ :Ngrep 
@@ -123,20 +128,32 @@ endfor
 nnoremap viz v[zo]z$
 " Mappings {{{1
 " File navigation {{{2
-"nnoremap '<Space> :FufBookmarkDir<cr>
-nnoremap '.  :e %:h<C-d>
-nnoremap ''  :b#<cr>
-nnoremap ';  :e %:r<C-d>
+" . = location of current file
+nnoremap '.  :exe ":FZF " . expand("%:h")<CR>
+" / = /
 nnoremap '/  :e /<C-d>
-nnoremap 'd  :e ~/Documents/<C-d>
-nnoremap 'f  :e <C-d>
-nnoremap 'h  :e ~/<C-d>
-nnoremap 'k  :b <C-d>
-"nnoremap 'l  :FufTag<cr>
-nnoremap 'n  :e ~/Documents/Notes/<C-d>
-nnoremap 'p  :e ~/Documents/Archive/Important/passwords.gpg<cr>
+" b = buffers
+nnoremap 'b  :Buffers<cr>
+" c = config
+nnoremap 'c  :FZF ~/.config/<cr>
+" d = documents
+nnoremap 'd  :FZF ~/Documents/<cr>
+" f = fzf
+nnoremap 'f  :FZF<cr>
+" g = grep (ripgrep)
+nnoremap 'g  :Rg 
+" h = home
+nnoremap 'h  :FZF ~/<cr>
+" n = notes
+nnoremap 'n  :FZF ~/Documents/Notes/<cr>
+" t = tags
+nnoremap 't  :Tags<cr>
+" r = bashrc
 nnoremap 'r  :e ~/.bashrc<cr>
+" v = vimrc
 nnoremap 'v  :e $MYVIMRC<cr>
+" toggle last buffer
+nnoremap ''  :b#<cr>
 " Leaders {{{2
 nnoremap <leader>\ :!chmod +x %<cr>:!%:p<cr>
 nnoremap <leader>. :cd %:h<cr>
@@ -144,10 +161,9 @@ inoremap <leader>d <C-r>=strftime('%D %l:%M%P')<cr>
 inoremap <leader>D <C-r>=strftime('%D')<cr>
 nnoremap <leader>d "_d
 inoremap <leader>i import code; code.interact(local=dict(globals(), **locals()))<esc>
+nnoremap <leader>n :exe "e ~/Documents/Notes/Scratch/stash/".strftime("%F-%H%M%S").".md"<cr>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
-nnoremap <leader>t :term ++curwin<cr>
-nnoremap <leader>v :term ++curwin vimpc<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>x :sign unplace *<cr>
 nnoremap <leader>z :wq!<cr>

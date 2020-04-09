@@ -24,7 +24,9 @@ xbacklight -set 50
 # sets background
 ~/.fehbg &
 
-exec i3
+sxhkd &
+
+exec bspwm
 # exec startplasma-x11
 # exec i3 -V >> /var/log/i3/$(date +'%F-%k-%M-%S').log 2>&1
 
