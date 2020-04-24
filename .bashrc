@@ -1,8 +1,8 @@
 # Setup {{{1
 stty -ixon -ixoff # turns off CTRL-S
 [[ $- != *i* ]] && return
-bind '"\C-f":"cd_with_fzf\n"'
-bind '"\C-o":"open_with_fzf\n"'
+bind '"\C-o":"cd_with_fzf\n"'
+bind '"\C-f":"open_with_fzf\n"'
 bind '"\C-v":"vim\n"'
 
 export BROWSER=/usr/bin/qutebrowser
@@ -55,8 +55,8 @@ alias pandoc="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex"
 alias pretty-json="python2 -mjson.tool"
 alias print="lpr -P 'Deskjet_F4500'"
 alias r='ranger'
-# alias screencast="ffmpeg -f alsa -ac 2 -i loopout -f alsa -ac 2 -i hw:2,0 -filter_complex amix=inputs=2:duration=first -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec aac -vcodec libx264 -crf 0 -preset medium output.mp4"
-alias screencast="ffmpeg -f pulse -i 3 -ac 2 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
+alias screencast="ffmpeg -f alsa -ac 2 -i default -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
+# alias screencast="ffmpeg -f pulse -i 3 -ac 2 -f x11grab -r 30 -s 1920x1080 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias screencast-no-sound="ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 0 -y screencast.mkv"
 alias slideshow="pandoc --pdf-engine=lualatex -H $HOME/.config/pandoc/fonts.tex -t beamer -o slideshow.pdf"
 alias syms="find . -maxdepth 1 -type l -print | while read line; do ls -alc "\$line"; done"
@@ -69,11 +69,19 @@ alias wifi="sudo wifi-menu -o"
 alias writer="libreoffice --writer"
 # Functions {{{1
 open_with_fzf() {
-# fd -t f -H | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open 2>&-
-fd -t f -H | fzf -m --preview="xdg-mime query default {}" | xargs -ro -d "\n" xdg-open
+file="$(fd -t f -H | fzf --preview="head -$LINES {}")"
+if [ -n "$file" ]; then
+    mimetype="$(xdg-mime query filetype $file)"
+    default="$(xdg-mime query default $mimetype)"
+    if [[ "$default" == "vim.desktop" ]]; then
+        vim "$file"
+    else
+        &>/dev/null xdg-open "$file" & disown
+    fi
+fi
 }
 cd_with_fzf() {
-cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && clear
+cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && clear
 }
 pacs() {
 sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)

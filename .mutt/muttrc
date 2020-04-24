@@ -1,27 +1,24 @@
 # first things first
 set editor      = "vim +start"
-set realname    = "Conner McDaniel"
 
 set mail_check  = 0
 set copy        = no
-set mbox_type   = Maildir
-set folder      = ~/.mail/gmail
-set spoolfile   = +INBOX
+set sidebar_visible
+set sidebar_width = 20
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+set mail_check_stats
 
-bind index,pager,attach g noop
-source ~/.mutt/accounts/gmail
-# source ~/.mutt/muttgpg
 source ~/.mutt/keybindings
 source ~/.mutt/colorscheme
 
+source ~/.mutt/accounts/fastmail
+macro index,pager,attach,compose gf "<enter-command> source ~/.mutt/accounts/fastmail<Enter><enter-command> my_hdr From: Conner McDaniel <conner@fastmail.com><Enter><change-folder>=INBOX<Enter>" "Fastmail"
+macro index,pager,attach,compose gs "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
+#
+
 mailboxes +INBOX \
           +Archive \
-          +Research \
-          +Sent \
-          ~/.mail/gmail/INBOX \
-          ~/.mail/gmail/"[Gmail].All_Mail" \
-          ~/.mail/gmail/"[Gmail].Sent_Mail" \
-          ~/.mail/gmail/"[Gmail].Starred"
+          +Gmail \
 
 alternative_order text/plain text/enriched text/html
 auto_view text/html

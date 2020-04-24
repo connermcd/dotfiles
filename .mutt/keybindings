@@ -1,3 +1,8 @@
+bind index,pager,attach g noop
+bind index,pager \CP sidebar-prev       # Ctrl-Shift-P - Previous Mailbox
+bind index,pager \CN sidebar-next       # Ctrl-Shift-N - Next Mailbox
+bind index,pager \CO sidebar-open       # Ctrl-Shift-O - Open Highlighted Mailbox
+
 bind generic,index Q exit
 bind pager u noop
 bind pager n noop
@@ -37,8 +42,6 @@ bind index,pager \Cd half-down
 bind index,pager \Cu half-up
 bind index,pager \Cf next-page
 bind index,pager \Cb previous-page
-bind index,pager \Cn next-thread
-bind index,pager \Cp previous-thread
 
 bind index,pager f forward-message
 bind index,pager p previous-undeleted
@@ -55,9 +58,9 @@ macro attach s <save-entry><kill-line>$HOME/Downloads<enter> "Save to default di
 
 macro pager u <pipe-entry>'urlscan --run "qutebrowser {}"'<enter> 'Follow links with urlscan'
 
-macro index,pager,attach,compose go "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
-macro compose gi "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
-macro index,pager,attach,compose gi "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
-macro compose gs "<esc>f\CuConner McDaniel <cmcda1@lsuhsc.edu><enter>
+# macro index,pager,attach,compose go "<enter-command> source ~/.mutt/accounts/gmail<Enter><enter-command> my_hdr From: Conner McDaniel <connermcd@gmail.com><Enter><change-folder>=INBOX<Enter>" "Gmail"
+# macro compose gi "<esc>f\CuConner McDaniel <connermcd@gmail.com><enter>
+# macro index,pager,attach,compose gi "<enter-command> source ~/.mutt/accounts/lsuhsc<Enter><enter-command> my_hdr From: Conner McDaniel <cmcda1@lsuhsc.edu><Enter><change-folder>=INBOX<Enter>" "LSUHSC"
+# macro compose gs "<esc>f\CuConner McDaniel <cmcda1@lsuhsc.edu><enter>
 
 # vim: ft=muttrc

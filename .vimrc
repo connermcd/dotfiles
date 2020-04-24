@@ -145,7 +145,7 @@ nnoremap 'g  :Rg
 " h = home
 nnoremap 'h  :FZF ~/<cr>
 " n = notes
-nnoremap 'n  :FZF ~/Documents/Notes/<cr>
+nnoremap 'n  :FZF $NOTES_DIR/<cr>
 " t = tags
 nnoremap 't  :Tags<cr>
 " r = bashrc
@@ -157,11 +157,12 @@ nnoremap ''  :b#<cr>
 " Leaders {{{2
 nnoremap <leader>\ :!chmod +x %<cr>:!%:p<cr>
 nnoremap <leader>. :cd %:h<cr>
+nnoremap <leader>a :Archive<cr>
 inoremap <leader>d <C-r>=strftime('%D %l:%M%P')<cr>
 inoremap <leader>D <C-r>=strftime('%D')<cr>
-nnoremap <leader>d "_d
+"nnoremap <leader>d :delete the current file
 inoremap <leader>i import code; code.interact(local=dict(globals(), **locals()))<esc>
-nnoremap <leader>n :exe "e ~/Documents/Notes/Scratch/stash/".strftime("%F-%H%M%S").".md"<cr>
+nnoremap <leader>n :exe "e $NOTES_DIR/Scratch/stash/".strftime("%F-%H%M%S").".md"<cr>
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>s :set spell!<cr>
 nnoremap <leader>w :w<cr>
@@ -176,6 +177,8 @@ inoremap <C-y> <Esc>:sil exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype dete
 
 " Type 1. something<C-j> for 2.
 inoremap <C-j> <esc>:exe "norm Ypf lDB\<C-a>"<cr>A
+
+nnoremap gd r<C-k>OK<cr>
 
 " Use :norm! so a count can be accepted
 nnoremap <C-j> :norm! o<esc>k<cr>
@@ -223,7 +226,9 @@ augroup vimrc
     au BufWrite * match ExtraWhitespace /\s\+$\| \+\ze\t/
     au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG
 augroup end
-" Functions {{{1
+" Commands and Functions {{{1
+" Notes {{{2
+command! Archive  cd $NOTES_DIR | exe "sav Scratch/stash/" . strftime("%s") . ".md"
 " Pack {{{2
 command! PackUpdate echo system('find ~/.vim/pack/bundle/start/*/. -maxdepth 0 -execdir pwd \; -execdir git pull \;')
 command! PackList echo system('ls ~/.vim/pack/bundle/start')
